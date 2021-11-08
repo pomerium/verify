@@ -1,0 +1,41 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "target": "es2017",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": false,
+    "strictNullChecks": false,
+    "forceConsistentCasingInFileNames": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "preserveConstEnums": true,
+    "noEmit": true,
+    "downlevelIteration": true,
+    "jsx": "react-jsx",
+    "noFallthroughCasesInSwitch": true,
+    "types": [
+      "google-protobuf",
+      "history",
+      "jest",
+      "json-stable-stringify",
+      "lodash",
+      "nprogress",
+      "pluralize",
+      "prettyjson",
+      "react",
+      "react-dom",
+      "react-redux",
+      "react-router-dom",
+      "redux-form",
+      "uuid",
+      "validator"
+    ]
+  },
+  "include": ["src"]
+}

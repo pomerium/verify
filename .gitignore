@@ -1,0 +1,6 @@
+bin/
+coverage.txt
+dist/index.js
+node_modules/
+.idea/
+.vscode/
