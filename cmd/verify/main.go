@@ -1,55 +1,39 @@
 package main
 
 import (
-	"io"
-	"net/http"
+	"context"
 	"os"
-	"path"
 
-	"github.com/go-chi/chi"
 	"github.com/rs/zerolog/log"
 
 	"github.com/pomerium/verify"
 )
 
 func main() {
-	bindAddress := os.Getenv("BIND_ADDRESS")
-	if bindAddress == "" {
-		bindAddress = ":8080"
+	addr := verify.DefaultBindAddress
+	if v, ok := os.LookupEnv("ADDR"); ok {
+		addr = v
+	} else if v, ok := os.LookupEnv("PORT"); ok {
+		addr = ":" + v
 	}
 
-	r := chi.NewRouter()
-	r.NotFound(func(w http.ResponseWriter, r *http.Request) {
-		ps := []string{
-			path.Join("dist", r.URL.Path, "index.html"),
-			path.Join("dist", r.URL.Path),
-		}
+	jwksEndpoint := verify.DefaultJWKSEndpoint
+	if v, ok := os.LookupEnv("JWKS_ENDPOINT"); ok {
+		jwksEndpoint = v
+	}
 
-		for _, p := range ps {
-			f, err := verify.FS.Open(p)
-			if err != nil {
-				continue
-			}
-			defer f.Close()
+	firestoreProjectID := verify.DefaultProjectID
+	if v, ok := os.LookupEnv("GCLOUD_PROJECT"); ok {
+		firestoreProjectID = v
+	}
 
-			fi, err := f.Stat()
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
-
-			// ignore directories
-			if fi.IsDir() {
-				continue
-			}
-
-			http.ServeContent(w, r, path.Base(r.URL.Path), fi.ModTime(), f.(io.ReadSeeker))
-			return
-		}
-
-		http.NotFound(w, r)
-	})
-
-	log.Info().Str("bind-address", bindAddress).Msg("starting http listener")
-	http.ListenAndServe(bindAddress, r)
+	srv := verify.New(
+		verify.WithBindAddress(addr),
+		verify.WithFirestoreProjectID(firestoreProjectID),
+		verify.WithJWKSEndpoint(jwksEndpoint),
+	)
+	err := srv.Run(context.Background())
+	if err != nil {
+		log.Fatal().Err(err).Send()
+	}
 }
