@@ -26,7 +26,16 @@ func (srv *Server) serveAPIWebAuthnAuthenticate(w http.ResponseWriter, r *http.R
 		return
 	}
 
-	rp := webauthn.NewRelyingParty(getRPOrigin(r), srv.storage)
+	origin := getRPOrigin(r)
+	if clientData, err := req.Credential.Response.UnmarshalClientData(); err == nil {
+		// use the provided origin
+		origin = clientData.Origin
+	}
+
+	rp := webauthn.NewRelyingParty(origin, srv.storage)
+
+	// This verification is insecure because we trust the options provided by the client. A real implementation
+	// should generate the options (particularly the challenge) on the server.
 	credential, err := rp.VerifyAuthenticationCeremony(r.Context(), req.Options, req.Credential)
 	if err != nil {
 		log.Error().Err(err).Msg("webauthn: invalid authentication ceremony")
@@ -51,7 +60,16 @@ func (srv *Server) serveAPIWebAuthnRegister(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	rp := webauthn.NewRelyingParty(getRPOrigin(r), srv.storage)
+	origin := getRPOrigin(r)
+	if clientData, err := req.Credential.Response.UnmarshalClientData(); err == nil {
+		// use the provided origin
+		origin = clientData.Origin
+	}
+
+	rp := webauthn.NewRelyingParty(origin, srv.storage)
+
+	// This verification is insecure because we trust the options provided by the client. A real implementation
+	// should generate the options (particularly the challenge) on the server.
 	credential, err := rp.VerifyRegistrationCeremony(r.Context(), req.Options, req.Credential)
 	if err != nil {
 		log.Error().Err(err).Msg("webauthn: invalid registration ceremony")
