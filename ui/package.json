@@ -1,0 +1,33 @@
+{
+  "name": "@pomerium/verify",
+  "author": "pomerium inc",
+  "email": "info@pomerium.com",
+  "version": "0.1.0",
+  "main": "src/index.tsx",
+  "repository": "git@github.com:pomerium/verify.git",
+  "license": "Apache-2.0",
+  "scripts": {
+    "build": "esbuild --bundle src/index.tsx --outfile=dist/index.js",
+    "format": "prettier --write .",
+    "lint": "eslint .",
+    "watch": "esbuild --bundle src/index.tsx --outfile=dist/index.js --watch"
+  },
+  "dependencies": {
+    "@borderless/base64": "^1.0.1",
+    "@emotion/react": "^11.5.0",
+    "@emotion/styled": "^11.3.0",
+    "@mui/material": "^5.1.0",
+    "base64-arraybuffer": "^1.0.1",
+    "prettier": "^2.4.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "typescript": "^4.4.4"
+  },
+  "devDependencies": {
+    "@trivago/prettier-plugin-sort-imports": "2.0.4",
+    "@types/react": "^17.0.34",
+    "@types/react-dom": "^17.0.11",
+    "esbuild": "^0.13.12",
+    "eslint": "7.32.0"
+  }
+}

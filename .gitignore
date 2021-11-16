@@ -1,0 +1,10 @@
+bin/
+coverage.txt
+ui/dist/index.js
+node_modules/
+.idea/
+.vscode/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+ui/yarn-error.log
