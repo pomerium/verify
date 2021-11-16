@@ -5,7 +5,6 @@ BUILDDIR := ${PREFIX}/dist
 BINDIR := ${PREFIX}/bin
 
 GO ?= "go"
-GO_LDFLAGS=-ldflags "-s -w $(CTIMEVAR)"
 YARN ?= "yarn"
 
 # Build binary artifact
@@ -16,7 +15,7 @@ build: build-ui build-verify
 .PHONY: build-verify
 build-verify:
 	@echo "==> $@"
-	$(GO) build ${GO_LDFLAGS} -o ${BINDIR}/${NAME} cmd/verify/*.go
+	$(GO) build -o ${BINDIR}/${NAME} cmd/verify/*.go
 
 # Build frontend javascript
 .PHONY: build-ui
