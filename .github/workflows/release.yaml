@@ -1,0 +1,59 @@
+name:  Release
+on:
+  push:
+    branches: 
+      - master
+      
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    outputs:
+      image_tags: ${{ steps.meta.outputs.tags }}
+      meta_json: ${{ steps.meta.outputs.json }}
+      
+    steps: 
+      - uses: actions/checkout@v2
+      - name: docker meta
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: gcr.io/pomerium-registry/verify
+          tags: |
+            type=sha,priority=1000
+            type=ref,event=branch
+
+      - name: gcloud authenticate
+        uses: google-github-actions/setup-gcloud@v0.2.1
+        with:
+          export_default_credentials: true
+          project_id: ${{ secrets.GCP_PRODUCTION_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+
+      - name: gcloud docker setup
+        run: gcloud auth configure-docker
+
+      - name: build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: publish
+    steps:
+      - uses: google-github-actions/setup-gcloud@v0.2.1
+        with:
+          export_default_credentials: true
+          project_id: ${{ secrets.GCP_PRODUCTION_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+
+      - name: deploy to cloud run
+        uses: google-github-actions/deploy-cloudrun@main
+        with:
+          image: ${{ fromJSON(needs.publish.outputs.meta_json).tags[0] }}
+          service: verify
+          flags: "--allow-unauthenticated"
+
