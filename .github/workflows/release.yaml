@@ -8,7 +8,6 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     outputs:
-      image_tags: ${{ steps.meta.outputs.tags }}
       meta_json: ${{ steps.meta.outputs.json }}
       
     steps: 
@@ -17,7 +16,9 @@ jobs:
         id: meta
         uses: docker/metadata-action@v3
         with:
-          images: gcr.io/pomerium-registry/verify
+          flavor: |
+            latest=true
+          images: gcr.io/pomerium-registry/verify,pomerium/verify
           tags: |
             type=sha,priority=1000
             type=ref,event=branch
@@ -32,6 +33,12 @@ jobs:
       - name: gcloud docker setup
         run: gcloud auth configure-docker
 
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      
       - name: build and push
         uses: docker/build-push-action@v2
         with:
