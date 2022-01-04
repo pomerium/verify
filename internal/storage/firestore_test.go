@@ -33,7 +33,7 @@ func TestFirestoreBackend(t *testing.T) {
 
 // WithTestFirestore starts a test firestore emulator.
 func WithTestFirestore(handler func(context.Context, *firestore.Client) error) error {
-	maxWait := time.Minute
+	maxWait := time.Minute * 10
 
 	ctx, clearTimeout := context.WithTimeout(context.Background(), maxWait)
 	defer clearTimeout()
