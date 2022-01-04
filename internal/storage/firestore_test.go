@@ -2,6 +2,8 @@ package storage
 
 import (
 	"context"
+	"fmt"
+	"net"
 	"os"
 	"path/filepath"
 	"testing"
@@ -60,15 +62,29 @@ func WithTestFirestore(handler func(context.Context, *firestore.Client) error) e
 		Mounts: []string{
 			filepath.Join(wd, "..", "..") + ":/home/node",
 		},
+		ExposedPorts: []string{"8080"},
 	})
 	if err != nil {
 		return err
 	}
 	_ = resource.Expire(uint(maxWait.Seconds()))
-
 	go tailLogs(ctx, pool, resource)
 
-	host := resource.Container.NetworkSettings.IPAddress + ":8080"
+	host := resource.GetHostPort("8080/tcp")
+	if os.Getenv("CI") == "" {
+		host = resource.Container.NetworkSettings.IPAddress + ":8080"
+	}
+
+	if err = pool.Retry(func() error {
+		conn, err := net.Dial("tcp", host)
+		if err != nil {
+			return err
+		}
+		_ = conn.Close()
+		return nil
+	}); err != nil {
+		return fmt.Errorf("error starting pubsub emulator: %w", err)
+	}
 
 	if prev, ok := os.LookupEnv("FIRESTORE_EMULATOR_HOST"); ok {
 		defer func() {
@@ -107,16 +123,12 @@ func WithTestFirestore(handler func(context.Context, *firestore.Client) error) e
 }
 
 func tailLogs(ctx context.Context, pool *dockertest.Pool, resource *dockertest.Resource) {
-	opts := docker.LogsOptions{
-		Context: ctx,
-
-		Stderr: true,
-		Stdout: true,
-		Follow: true,
-
-		Container: resource.Container.ID,
-
+	_ = pool.Client.Logs(docker.LogsOptions{
+		Context:      ctx,
+		Stderr:       true,
+		Stdout:       true,
+		Follow:       true,
+		Container:    resource.Container.ID,
 		OutputStream: os.Stderr,
-	}
-	pool.Client.Logs(opts)
+	})
 }
