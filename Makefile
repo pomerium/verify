@@ -28,3 +28,8 @@ build-ui: yarn
 yarn:
 	@echo "==> $@"
 	cd ui; $(YARN)
+
+# Run go tests
+test:
+	@echo "==> $@"
+	go test -v ./...

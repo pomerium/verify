@@ -33,10 +33,21 @@ func TestFirestoreBackend(t *testing.T) {
 
 // WithTestFirestore starts a test firestore emulator.
 func WithTestFirestore(handler func(context.Context, *firestore.Client) error) error {
-	maxWait := time.Minute
+	maxWait := time.Minute * 10
 
 	ctx, clearTimeout := context.WithTimeout(context.Background(), maxWait)
 	defer clearTimeout()
+
+	// if we've already set an emulator, don't start a new one
+	if _, ok := os.LookupEnv("FIRESTORE_EMULATOR_HOST"); ok {
+		client, err := firestore.NewClient(ctx, "test")
+		if err != nil {
+			log.Error().Err(err).Send()
+			return err
+		}
+		defer client.Close()
+		return handler(ctx, client)
+	}
 
 	pool, err := dockertest.NewPool("")
 	if err != nil {
@@ -60,25 +71,17 @@ func WithTestFirestore(handler func(context.Context, *firestore.Client) error) e
 		Mounts: []string{
 			filepath.Join(wd, "..", "..") + ":/home/node",
 		},
+		ExposedPorts: []string{"8080"},
 	})
 	if err != nil {
 		return err
 	}
 	_ = resource.Expire(uint(maxWait.Seconds()))
-
 	go tailLogs(ctx, pool, resource)
 
 	host := resource.Container.NetworkSettings.IPAddress + ":8080"
 
-	if prev, ok := os.LookupEnv("FIRESTORE_EMULATOR_HOST"); ok {
-		defer func() {
-			os.Setenv("FIRESTORE_EMULATOR_HOST", prev)
-		}()
-	} else {
-		defer func() {
-			os.Unsetenv("FIRESTORE_EMULATOR_HOST")
-		}()
-	}
+	defer func() { os.Unsetenv("FIRESTORE_EMULATOR_HOST") }()
 	os.Setenv("FIRESTORE_EMULATOR_HOST", host)
 
 	var client *firestore.Client
@@ -107,16 +110,12 @@ func WithTestFirestore(handler func(context.Context, *firestore.Client) error) e
 }
 
 func tailLogs(ctx context.Context, pool *dockertest.Pool, resource *dockertest.Resource) {
-	opts := docker.LogsOptions{
-		Context: ctx,
-
-		Stderr: true,
-		Stdout: true,
-		Follow: true,
-
-		Container: resource.Container.ID,
-
+	_ = pool.Client.Logs(docker.LogsOptions{
+		Context:      ctx,
+		Stderr:       true,
+		Stdout:       true,
+		Follow:       true,
+		Container:    resource.Container.ID,
 		OutputStream: os.Stderr,
-	}
-	pool.Client.Logs(opts)
+	})
 }

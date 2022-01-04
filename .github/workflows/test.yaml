@@ -1,0 +1,69 @@
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+name: Test
+jobs:
+  build:
+    strategy:
+      matrix:
+        go-version: [1.17.x]
+        platform: [ubuntu-latest]
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.go-version }}
+      - name: set env vars
+        run: echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: cache go binaries
+        uses: actions/cache@v2
+        id: cache-go-bin
+        with:
+          path: ~/go/bin
+          key: ${{ runner.os }}-${{ hashFiles('**/go.mod') }}
+          restore-keys: ${{ runner.os }}-go-bin
+      - name: build
+        run: make build
+      - name: docker
+        run: docker build .
+
+  test:
+    strategy:
+      matrix:
+        go-version: [1.17.x]
+        platform: [ubuntu-latest]
+    runs-on: ${{ matrix.platform }}
+
+    steps:
+      - uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.go-version }}
+      - name: set env vars
+        run: echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: cache go binaries
+        uses: actions/cache@v2
+        id: cache-go-bin
+        with:
+          path: ~/go/bin
+          key: ${{ runner.os }}-${{ hashFiles('**/go.mod') }}
+          restore-keys: ${{ runner.os }}-go-bin
+      - name: setup node
+        uses: actions/setup-node@v2
+      - name: start firestore emulator
+        run: |
+          npm i -g firebase firebase-tools
+          firebase setup:emulators:firestore
+          firebase emulators:start --only firestore --project test &
+      - name: test
+        run: make test
+        env:
+          FIRESTORE_EMULATOR_HOST: localhost:8080
