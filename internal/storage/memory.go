@@ -17,7 +17,9 @@ type InMemoryBackend struct {
 
 // NewInMemoryBackend creates a new InMemoryBackend.
 func NewInMemoryBackend() *InMemoryBackend {
-	return &InMemoryBackend{}
+	return &InMemoryBackend{
+		credentials: make(map[string]*webauthn.Credential),
+	}
 }
 
 // GetCredential retrieves a credential.
