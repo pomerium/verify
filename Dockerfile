@@ -24,6 +24,7 @@ RUN go mod download
 # build console
 COPY --from=ui /build/ui/dist ./ui/dist
 COPY ./cmd/ ./cmd/
+COPY ./internal/ ./internal/
 COPY ./*.go ./
 RUN make build-verify
 
