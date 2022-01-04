@@ -62,7 +62,7 @@ jobs:
         run: |
           npm i -g firebase firebase-tools
           firebase setup:emulators:firestore
-          firebase emulators:start --only firestore &
+          firebase emulators:start --only firestore --project test &
       - name: test
         run: make test
         env:
