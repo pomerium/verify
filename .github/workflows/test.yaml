@@ -39,6 +39,7 @@ jobs:
         go-version: [1.17.x]
         platform: [ubuntu-latest]
     runs-on: ${{ matrix.platform }}
+
     steps:
       - uses: actions/setup-go@v2
         with:
@@ -55,5 +56,14 @@ jobs:
           path: ~/go/bin
           key: ${{ runner.os }}-${{ hashFiles('**/go.mod') }}
           restore-keys: ${{ runner.os }}-go-bin
+      - name: setup node
+        uses: actions/setup-node@v2
+      - name: start firestore emulator
+        run: |
+          npm i -g firebase firebase-tools
+          firebase setup:emulators:firestore
+          firebase emulators:start --only firestore &
       - name: test
         run: make test
+        env:
+          FIRESTORE_EMULATOR_HOST: localhost:8080

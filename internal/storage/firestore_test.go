@@ -2,8 +2,6 @@ package storage
 
 import (
 	"context"
-	"fmt"
-	"net"
 	"os"
 	"path/filepath"
 	"testing"
@@ -40,6 +38,17 @@ func WithTestFirestore(handler func(context.Context, *firestore.Client) error) e
 	ctx, clearTimeout := context.WithTimeout(context.Background(), maxWait)
 	defer clearTimeout()
 
+	// if we've already set an emulator, don't start a new one
+	if _, ok := os.LookupEnv("FIRESTORE_EMULATOR_HOST"); ok {
+		client, err := firestore.NewClient(ctx, "test")
+		if err != nil {
+			log.Error().Err(err).Send()
+			return err
+		}
+		defer client.Close()
+		return handler(ctx, client)
+	}
+
 	pool, err := dockertest.NewPool("")
 	if err != nil {
 		return err
@@ -70,31 +79,9 @@ func WithTestFirestore(handler func(context.Context, *firestore.Client) error) e
 	_ = resource.Expire(uint(maxWait.Seconds()))
 	go tailLogs(ctx, pool, resource)
 
-	host := resource.GetHostPort("8080/tcp")
-	if os.Getenv("CI") == "" {
-		host = resource.Container.NetworkSettings.IPAddress + ":8080"
-	}
+	host := resource.Container.NetworkSettings.IPAddress + ":8080"
 
-	if err = pool.Retry(func() error {
-		conn, err := net.Dial("tcp", host)
-		if err != nil {
-			return err
-		}
-		_ = conn.Close()
-		return nil
-	}); err != nil {
-		return fmt.Errorf("error starting pubsub emulator: %w", err)
-	}
-
-	if prev, ok := os.LookupEnv("FIRESTORE_EMULATOR_HOST"); ok {
-		defer func() {
-			os.Setenv("FIRESTORE_EMULATOR_HOST", prev)
-		}()
-	} else {
-		defer func() {
-			os.Unsetenv("FIRESTORE_EMULATOR_HOST")
-		}()
-	}
+	defer func() { os.Unsetenv("FIRESTORE_EMULATOR_HOST") }()
 	os.Setenv("FIRESTORE_EMULATOR_HOST", host)
 
 	var client *firestore.Client
