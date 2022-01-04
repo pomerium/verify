@@ -2,12 +2,12 @@ package verify
 
 import (
 	"context"
-	"fmt"
 	"net"
 	"net/http"
 
 	"cloud.google.com/go/firestore"
 	"github.com/go-chi/chi"
+	"github.com/pomerium/verify/internal/storage"
 	"github.com/rs/zerolog/log"
 	"golang.org/x/sync/errgroup"
 )
@@ -16,10 +16,9 @@ import (
 type Server struct {
 	cfg *config
 
-	client  *firestore.Client
 	http    *http.Server
 	router  chi.Router
-	storage *Storage
+	storage storage.Backend
 }
 
 // New creates a new Server.
@@ -48,16 +47,16 @@ func (srv *Server) Run(ctx context.Context) error {
 }
 
 func (srv *Server) init(ctx context.Context) error {
-	var err error
-
 	log.Info().
 		Str("project-id", srv.cfg.firestoreProjectID).
 		Msg("connecting to firestore")
-	srv.client, err = firestore.NewClient(ctx, srv.cfg.firestoreProjectID)
-	if err != nil {
-		return fmt.Errorf("failed to create firestore client: %w", err)
+	client, err := firestore.NewClient(ctx, srv.cfg.firestoreProjectID)
+	if err == nil {
+		srv.storage = storage.NewFirestoreBackend(client)
+	} else {
+		log.Error().Err(err).Msg("failed to create firestore client, falling back to in-memory storage")
+		srv.storage = storage.NewInMemoryBackend()
 	}
-	srv.storage = &Storage{client: srv.client}
 
 	srv.initRouter()
 
