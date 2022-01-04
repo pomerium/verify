@@ -5,6 +5,7 @@ import (
 	"io"
 	"net/http"
 
+	"github.com/pomerium/verify/internal/storage"
 	"github.com/pomerium/webauthn"
 	"github.com/rs/zerolog/log"
 )
@@ -12,7 +13,7 @@ import (
 const maxBodySize = 4 * 1024 * 1024
 
 func (srv *Server) serveAPIWebAuthnAuthenticate(w http.ResponseWriter, r *http.Request) {
-	var req WebAuthnAuthenticateRequest
+	var req storage.WebAuthnAuthenticateRequest
 	err := decodeJSONBody(r, &req)
 	if err != nil {
 		log.Error().Err(err).Msg("bad request for webauthn authenticate")
@@ -46,7 +47,7 @@ func (srv *Server) serveAPIWebAuthnAuthenticate(w http.ResponseWriter, r *http.R
 }
 
 func (srv *Server) serveAPIWebAuthnRegister(w http.ResponseWriter, r *http.Request) {
-	var req WebAuthnRegisterRequest
+	var req storage.WebAuthnRegisterRequest
 	err := decodeJSONBody(r, &req)
 	if err != nil {
 		log.Error().Err(err).Msg("bad request for webauthn register")

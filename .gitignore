@@ -8,3 +8,4 @@ firebase-debug.log
 firestore-debug.log
 ui-debug.log
 ui/yarn-error.log
+.config/
