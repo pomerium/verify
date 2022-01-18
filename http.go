@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"io"
 	"io/fs"
+	stdlog "log"
 	"net/http"
 	"os"
 	"path"
@@ -26,6 +27,7 @@ var uiFS embed.FS
 func (srv *Server) initRouter() {
 	verifier, err := sdk.New(&sdk.Options{
 		Datastore: NewCache(1024),
+		Logger:    stdlog.New(log.With().Logger(), "", 0),
 	})
 	if err != nil {
 		log.Fatal().Err(err).Send()
