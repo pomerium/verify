@@ -1,6 +1,18 @@
 import React, { FC } from 'react';
+import uniq from 'lodash/uniq';
+import isString from 'lodash/isString';
 
 import { VerifyInfo } from '../api';
+
+const makeUnique = (entries: string|string[]): string[] => {
+  if (!entries) {
+    return [];
+  }
+  if (isString(entries)) {
+    return [entries];
+  }
+  return uniq(entries);
+};
 
 type Props = {
   info: VerifyInfo;
@@ -54,7 +66,7 @@ const VerifyIdentityToken: FC<Props> = ({ info }) => {
                 <tr>
                   <td>Audience</td>
                   <td>
-                    {info?.identity?.aud?.map((v) => (
+                    {makeUnique(info?.identity?.aud).map((v) => (
                       <p key={v}>{v}</p>
                     ))}
                   </td>
@@ -74,7 +86,7 @@ const VerifyIdentityToken: FC<Props> = ({ info }) => {
                 <tr>
                   <td>Groups</td>
                   <td>
-                    {info?.identity?.groups?.map((v) => (
+                    {makeUnique(info?.identity?.groups).map((v) => (
                       <p key={v}>{v}</p>
                     ))}
                   </td>
@@ -86,7 +98,7 @@ const VerifyIdentityToken: FC<Props> = ({ info }) => {
         <div className="category-link">
           Pomerium adds a signed JWT token to the incoming request headers (
           <code>X-Pomerium-Jwt-Assertion</code>) which can then be used to
-          assert a &nbsp;
+          assert a {" "}
           <a href="https://www.pomerium.com/docs/topics/getting-users-identity.html#verification">
             user's identity details
           </a>
