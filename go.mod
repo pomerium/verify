@@ -10,7 +10,7 @@ require (
 	github.com/pomerium/sdk-go v0.0.6
 	github.com/pomerium/webauthn v0.0.0-20211014213840-422c7ce1077f
 	github.com/rs/zerolog v1.26.0
-	github.com/stretchr/testify v1.7.0
+	github.com/stretchr/testify v1.8.0
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
 	google.golang.org/grpc v1.40.0
 )
@@ -63,5 +63,5 @@ require (
 	google.golang.org/protobuf v1.27.1 // indirect
 	gopkg.in/square/go-jose.v2 v2.6.0 // indirect
 	gopkg.in/yaml.v2 v2.3.0 // indirect
-	gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
