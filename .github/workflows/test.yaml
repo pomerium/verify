@@ -57,7 +57,7 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('**/go.mod') }}
           restore-keys: ${{ runner.os }}-go-bin
       - name: setup node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
       - name: start firestore emulator
         run: |
           npm i -g firebase firebase-tools
