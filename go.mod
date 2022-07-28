@@ -9,7 +9,7 @@ require (
 	github.com/ory/dockertest/v3 v3.8.1
 	github.com/pomerium/sdk-go v0.0.6
 	github.com/pomerium/webauthn v0.0.0-20211014213840-422c7ce1077f
-	github.com/rs/zerolog v1.26.0
+	github.com/rs/zerolog v1.27.0
 	github.com/stretchr/testify v1.8.0
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
 	google.golang.org/grpc v1.40.0
@@ -38,6 +38,8 @@ require (
 	github.com/googleapis/gax-go/v2 v2.1.1 // indirect
 	github.com/imdario/mergo v0.3.12 // indirect
 	github.com/lib/pq v1.2.0 // indirect
+	github.com/mattn/go-colorable v0.1.12 // indirect
+	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/mitchellh/mapstructure v1.4.1 // indirect
 	github.com/moby/term v0.0.0-20201216013528-df9cb8a40635 // indirect
 	github.com/opencontainers/go-digest v1.0.0-rc1 // indirect
