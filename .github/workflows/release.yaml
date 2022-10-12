@@ -1,30 +1,41 @@
-name:  Release
+name: Release
 on:
   push:
-    branches: 
+    branches:
       - main
-      
+
 jobs:
   publish:
     runs-on: ubuntu-latest
     outputs:
       meta_json: ${{ steps.meta.outputs.json }}
-      
-    steps: 
-      - uses: actions/checkout@v3
-      - name: docker meta
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
+
+      - name: Docker Meta
         id: meta
-        uses: docker/metadata-action@v4
+        uses: docker/metadata-action@12cce9efe0d49980455aaaca9b071c0befcdd702
         with:
           flavor: |
             latest=true
-          images: gcr.io/pomerium-registry/verify,pomerium/verify
+          images: |
+            gcr.io/pomerium-registry/verify
+            pomerium/verify
           tags: |
-            type=sha,priority=1000
             type=ref,event=branch
+            type=ref,event=pr
+            type=sha
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@e81a89b1732b9c48d79cd809d8d81d79c4647a18
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@95cb08cb2672c73d4ffd2f422e6d11953d2a9c70
 
       - name: gcloud authenticate
-        uses: google-github-actions/setup-gcloud@v0.6.0
+        uses: google-github-actions/setup-gcloud@877d4953d2c70a0ba7ef3290ae968eb24af233bb
         with:
           export_default_credentials: true
           project_id: ${{ secrets.GCP_PRODUCTION_PROJECT_ID }}
@@ -34,15 +45,16 @@ jobs:
         run: gcloud auth configure-docker
 
       - name: Login to DockerHub
-        uses: docker/login-action@v2
+        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
         with:
           username: ${{ secrets.DOCKERHUB_USER }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      
+
       - name: build and push
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@c56af957549030174b10d6867f20e78cfd7debc5
         with:
           context: .
+          platforms: linux/amd64,linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -51,16 +63,15 @@ jobs:
     runs-on: ubuntu-latest
     needs: publish
     steps:
-      - uses: google-github-actions/setup-gcloud@v0.6.0
+      - uses: google-github-actions/setup-gcloud@877d4953d2c70a0ba7ef3290ae968eb24af233bb
         with:
           export_default_credentials: true
           project_id: ${{ secrets.GCP_PRODUCTION_PROJECT_ID }}
           service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT }}
 
       - name: deploy to cloud run
-        uses: google-github-actions/deploy-cloudrun@main
+        uses: google-github-actions/deploy-cloudrun@530b4b6c6355648c5ef3ec32a4744d4e0659a016
         with:
           image: ${{ fromJSON(needs.publish.outputs.meta_json).tags[0] }}
           service: verify
           flags: "--allow-unauthenticated"
-
