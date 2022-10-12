@@ -1,68 +1,34 @@
+name: Test
+permissions:
+  contents: read
 on:
   push:
     branches:
       - main
-  pull_request:
+  pull_request: {}
 
-name: Test
 jobs:
-  build:
-    strategy:
-      matrix:
-        go-version: [1.18.x]
-        platform: [ubuntu-latest]
-    runs-on: ${{ matrix.platform }}
-    steps:
-      - uses: actions/setup-go@v3
-        with:
-          go-version: ${{ matrix.go-version }}
-      - name: set env vars
-        run: echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - name: cache go binaries
-        uses: actions/cache@v3
-        id: cache-go-bin
-        with:
-          path: ~/go/bin
-          key: ${{ runner.os }}-${{ hashFiles('**/go.mod') }}
-          restore-keys: ${{ runner.os }}-go-bin
-      - name: build
-        run: make build
-      - name: docker
-        run: docker build .
-
   test:
-    strategy:
-      matrix:
-        go-version: [1.18.x]
-        platform: [ubuntu-latest]
-    runs-on: ${{ matrix.platform }}
-
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/setup-go@v3
-        with:
-          go-version: ${{ matrix.go-version }}
-      - name: set env vars
-        run: echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
         with:
           fetch-depth: 0
-      - name: cache go binaries
-        uses: actions/cache@v3
-        id: cache-go-bin
+
+      - uses: actions/setup-go@268d8c0ca0432bb2cf416faae41297df9d262d7f
         with:
-          path: ~/go/bin
-          key: ${{ runner.os }}-${{ hashFiles('**/go.mod') }}
-          restore-keys: ${{ runner.os }}-go-bin
+          go-version: 1.19.x
+          cache: true
+
       - name: setup node
         uses: actions/setup-node@v3
+
       - name: start firestore emulator
         run: |
           npm i -g firebase firebase-tools
           firebase setup:emulators:firestore
           firebase emulators:start --only firestore --project test &
+
       - name: test
         run: make test
         env:
