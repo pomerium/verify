@@ -70,7 +70,7 @@ jobs:
           service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT }}
 
       - name: deploy to cloud run
-        uses: google-github-actions/deploy-cloudrun@530b4b6c6355648c5ef3ec32a4744d4e0659a016
+        uses: google-github-actions/deploy-cloudrun@5081b8db809e5800ddffa3c692d71da0cb670a34
         with:
           image: ${{ fromJSON(needs.publish.outputs.meta_json).tags[0] }}
           service: verify
