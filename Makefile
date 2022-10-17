@@ -27,7 +27,7 @@ build-ui: yarn
 .PHONY: yarn
 yarn:
 	@echo "==> $@"
-	cd ui; $(YARN)
+	cd ui; $(YARN) --network-timeout 100000
 
 # Run go tests
 test:
