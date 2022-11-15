@@ -69,6 +69,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: publish
     steps:
+      - name: checkout
+        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
+
       - name: gcloud authenticate
         uses: google-github-actions/auth@ef5d53e30bbcd8d0836f4288f5e50ff3e086997d
         with:
