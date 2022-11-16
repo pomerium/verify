@@ -1,5 +1,7 @@
-name: Release
+name: Docker
+
 on:
+  pull_request: {}
   push:
     branches:
       - main
@@ -35,11 +37,13 @@ jobs:
         uses: docker/setup-buildx-action@8c0edbc76e98fa90f69d9a2c020dcb50019dc325
 
       - name: gcloud authenticate
-        uses: google-github-actions/setup-gcloud@d51b5346f85640ec2aa2fa057354d2b82c2fcbce
+        uses: google-github-actions/auth@ef5d53e30bbcd8d0836f4288f5e50ff3e086997d
         with:
-          export_default_credentials: true
           project_id: ${{ secrets.GCP_PRODUCTION_PROJECT_ID }}
-          service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+          credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+
+      - name: gcloud sdk
+        uses: google-github-actions/setup-gcloud@d51b5346f85640ec2aa2fa057354d2b82c2fcbce
 
       - name: gcloud docker setup
         run: gcloud auth configure-docker
@@ -58,19 +62,28 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
   deploy:
     runs-on: ubuntu-latest
     needs: publish
     steps:
-      - uses: google-github-actions/setup-gcloud@d51b5346f85640ec2aa2fa057354d2b82c2fcbce
+      - name: checkout
+        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
+
+      - name: gcloud authenticate
+        uses: google-github-actions/auth@ef5d53e30bbcd8d0836f4288f5e50ff3e086997d
         with:
-          export_default_credentials: true
           project_id: ${{ secrets.GCP_PRODUCTION_PROJECT_ID }}
-          service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+          credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+
+      - name: gcloud sdk
+        uses: google-github-actions/setup-gcloud@d51b5346f85640ec2aa2fa057354d2b82c2fcbce
 
       - name: deploy to cloud run
         uses: google-github-actions/deploy-cloudrun@5081b8db809e5800ddffa3c692d71da0cb670a34
+        if: ${{ github.event_name != 'pull_request' }}
         with:
           image: ${{ fromJSON(needs.publish.outputs.meta_json).tags[0] }}
           service: verify
