@@ -37,6 +37,7 @@ jobs:
         uses: docker/setup-buildx-action@8c0edbc76e98fa90f69d9a2c020dcb50019dc325
 
       - name: gcloud authenticate
+        if: ${{ github.event_name != 'pull_request' }}
         uses: google-github-actions/auth@ef5d53e30bbcd8d0836f4288f5e50ff3e086997d
         with:
           project_id: ${{ secrets.GCP_PRODUCTION_PROJECT_ID }}
@@ -70,6 +71,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
+    if: ${{ github.event_name != 'pull_request' }}
     needs: publish
     steps:
       - name: checkout
