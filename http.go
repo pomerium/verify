@@ -24,10 +24,11 @@ import (
 //go:embed ui/dist
 var uiFS embed.FS
 
-func (srv *Server) initRouter() {
+func (srv *Server) initRouter(jwksEndpoint string) {
 	verifier, err := sdk.New(&sdk.Options{
 		Datastore: NewCache(1024),
 		Logger:    stdlog.New(log.With().Logger(), "", 0),
+		JWKSEndpoint: jwksEndpoint,
 	})
 	if err != nil {
 		log.Fatal().Err(err).Send()
