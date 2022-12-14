@@ -193,6 +193,10 @@ a:hover {
   background: #e25950;
 }
 
+.status-warn {
+  background: rgb(237 108 4);
+}
+
 /******* Clearfix *******/
 
 .clearfix:after {
