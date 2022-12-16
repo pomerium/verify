@@ -25,9 +25,16 @@ import (
 var uiFS embed.FS
 
 func (srv *Server) initRouter(jwksEndpoint string) {
+	transport := http.DefaultTransport.(*http.Transport).Clone()
+	transport.DialTLSContext = srv.tlsVerifier.DialTLSContext
+	client := &http.Client{
+		Transport: transport,
+	}
+
 	verifier, err := sdk.New(&sdk.Options{
-		Datastore: NewCache(1024),
-		Logger:    stdlog.New(log.With().Logger(), "", 0),
+		Datastore:    NewCache(1024),
+		HTTPClient:   client,
+		Logger:       stdlog.New(log.With().Logger(), "", 0),
 		JWKSEndpoint: jwksEndpoint,
 	})
 	if err != nil {
@@ -112,6 +119,7 @@ func (srv *Server) serveAPIVerifyInfo(w http.ResponseWriter, r *http.Request) {
 			"url":      r.URL.RequestURI(),
 			"host":     r.Host,
 			"hostname": getHostname(),
+			"tlsValid": srv.tlsVerifier.IsValid(r),
 		},
 		"headers": getPomeriumHeaders(r),
 	}

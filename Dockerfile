@@ -1,4 +1,4 @@
-FROM node:19@sha256:a0976cffecd3fad1697615eb14542e25deb2234f3beb4448417bfe88585ca4f8 as ui
+FROM node:19@sha256:50b76fc6dc5f03cb3d14c71b8564948aed2bc5124325f35830b2f3be21950af1 as ui
 WORKDIR /build
 
 COPY Makefile ./Makefile
@@ -12,7 +12,7 @@ RUN make yarn
 COPY ./ui/ ./ui/
 RUN make build-ui
 
-FROM golang:1.19.3-buster@sha256:93ca306de4e8eca74b80a49fe271efc520001b6eacc0905951cf7f0295e40ecb as build
+FROM golang:1.19.4-buster@sha256:e464bb0df6797fc799fe2a285544dc4cb9c4afa056d91c7e01ddf11683473f12 as build
 WORKDIR /build
 
 COPY Makefile ./Makefile

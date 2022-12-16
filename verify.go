@@ -7,25 +7,28 @@ import (
 
 	"cloud.google.com/go/firestore"
 	"github.com/go-chi/chi"
-	"github.com/pomerium/verify/internal/storage"
 	"github.com/rs/zerolog/log"
 	"golang.org/x/sync/errgroup"
+
+	"github.com/pomerium/verify/internal/storage"
 )
 
 // Server is the verify server backend.
 type Server struct {
 	cfg *config
 
-	http    *http.Server
-	router  chi.Router
-	storage storage.Backend
+	http        *http.Server
+	router      chi.Router
+	storage     storage.Backend
+	tlsVerifier *tlsVerifier
 }
 
 // New creates a new Server.
 func New(options ...Option) *Server {
 	cfg := getConfig(options...)
 	return &Server{
-		cfg: cfg,
+		cfg:         cfg,
+		tlsVerifier: newTLSVerifier(),
 	}
 }
 
