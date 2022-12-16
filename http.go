@@ -24,7 +24,7 @@ import (
 //go:embed ui/dist
 var uiFS embed.FS
 
-func (srv *Server) initRouter() {
+func (srv *Server) initRouter(jwksEndpoint string) {
 	transport := http.DefaultTransport.(*http.Transport).Clone()
 	transport.DialTLSContext = srv.tlsVerifier.DialTLSContext
 	client := &http.Client{
@@ -32,9 +32,10 @@ func (srv *Server) initRouter() {
 	}
 
 	verifier, err := sdk.New(&sdk.Options{
-		Datastore:  NewCache(1024),
-		HTTPClient: client,
-		Logger:     stdlog.New(log.With().Logger(), "", 0),
+		Datastore:    NewCache(1024),
+		HTTPClient:   client,
+		Logger:       stdlog.New(log.With().Logger(), "", 0),
+		JWKSEndpoint: jwksEndpoint,
 	})
 	if err != nil {
 		log.Fatal().Err(err).Send()
