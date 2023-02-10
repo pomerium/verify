@@ -5,7 +5,6 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"net"
-	"net/http"
 	"strings"
 	"sync"
 	"time"
@@ -14,12 +13,12 @@ import (
 )
 
 type tlsVerifier struct {
-	mu    sync.Mutex
-	valid map[string]struct{}
+	mu     sync.Mutex
+	errors map[string]error
 }
 
 func newTLSVerifier() *tlsVerifier {
-	return &tlsVerifier{valid: make(map[string]struct{})}
+	return &tlsVerifier{errors: make(map[string]error)}
 }
 
 func (v *tlsVerifier) DialTLSContext(ctx context.Context, network, addr string) (net.Conn, error) {
@@ -64,24 +63,23 @@ func (v *tlsVerifier) VerifyPeerCertificate(serverName string, rawCerts [][]byte
 	_, err := certs[0].Verify(opts)
 	v.mu.Lock()
 	if err == nil {
-		v.valid[serverName] = struct{}{}
+		delete(v.errors, serverName)
 	} else {
-		delete(v.valid, serverName)
+		v.errors[serverName] = err
+		log.Error().
+			Err(err).
+			Str("server-name", serverName).
+			Msg("invalid TLS certificate")
 	}
 	v.mu.Unlock()
 	return nil
 }
 
-func (v *tlsVerifier) IsValid(r *http.Request) bool {
-	if r == nil || r.TLS == nil {
-		return false
-	}
-
+func (v *tlsVerifier) GetTLSError(serverName string) error {
 	v.mu.Lock()
-	_, ok := v.valid[r.TLS.ServerName]
+	err := v.errors[serverName]
 	v.mu.Unlock()
-
-	return ok
+	return err
 }
 
 func tlsHost(targetAddr string) string {

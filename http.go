@@ -113,22 +113,25 @@ func (srv *Server) serveAPIVerifyInfo(w http.ResponseWriter, r *http.Request) {
 	type M = map[string]interface{}
 
 	res := M{
-		"request": M{
-			"origin":   getOrigin(r),
-			"method":   r.Method,
-			"url":      r.URL.RequestURI(),
-			"host":     r.Host,
-			"hostname": getHostname(),
-			"tlsValid": srv.tlsVerifier.IsValid(r),
-		},
 		"headers": getPomeriumHeaders(r),
 	}
+	var tlsErrStr string
 	if identity, err := sdk.FromContext(r.Context()); err == nil {
 		res["identity"] = identity
+		if e := srv.tlsVerifier.GetTLSError(identity.Issuer); e != nil {
+			tlsErrStr = e.Error()
+		}
 	} else {
 		res["error"] = err.Error()
 	}
-
+	res["request"] = M{
+		"origin":   getOrigin(r),
+		"method":   r.Method,
+		"url":      r.URL.RequestURI(),
+		"host":     r.Host,
+		"hostname": getHostname(),
+		"tlsError": tlsErrStr,
+	}
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(res)
 }
