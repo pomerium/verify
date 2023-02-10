@@ -6,7 +6,7 @@ export type VerifyInfoRequest = {
   method: string;
   origin: string;
   url: string;
-  tlsValid: boolean;
+  tlsError: string;
 };
 export type VerifyInfoIdentity = {
   iss?: string;

@@ -23,14 +23,15 @@ const VerifyStatus: FC<Props> = ({ info }) => {
               </label>
             </div>
           </>
-        ) : !info?.request?.tlsValid ? (
+        ) : info?.request?.tlsError ? (
           <>
             <span className="status-bubble status-warn"> </span>
             <div className="title-wrapper">
               <span className="title">TLS Certificate verification failed</span>
               <label className="status-time">
                 <span>
-                  TLS certificate verification failed when verifying the JWT.
+                  TLS certificate verification failed when verifying the JWT:{' '}
+                  {info?.request?.tlsError}
                 </span>
               </label>
             </div>
