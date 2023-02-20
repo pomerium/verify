@@ -1,4 +1,4 @@
-FROM node:19@sha256:33e99abf6cd64858bf5cc44824f1e50b7de61c9b9a3622c407951412a33fc28e as ui
+FROM node:19@sha256:d82f1c3ab27a01bd49f963ff4d24ef868852da6d3780d9d42e93b03f4fa3f62a as ui
 WORKDIR /build
 
 COPY Makefile ./Makefile
