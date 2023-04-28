@@ -30,4 +30,4 @@ jobs:
 
       - name: test
         run: |
-          firebase emulators:start --only firestore --project test 'make test'
+          firebase emulators:exec --only firestore --project test 'make test'
