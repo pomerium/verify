@@ -21,15 +21,13 @@ jobs:
           cache: true
 
       - name: setup node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@64ed1c7eab4cce3362f8c340dee64e5eaeef8f7c
 
-      - name: start firestore emulator
+      - name: install firestore emulator
         run: |
           npm i -g firebase firebase-tools
           firebase setup:emulators:firestore
-          firebase emulators:start --only firestore --project test &
 
       - name: test
-        run: make test
-        env:
-          FIRESTORE_EMULATOR_HOST: localhost:8080
+        run: |
+          firebase emulators:exec --only firestore --project test 'make test'

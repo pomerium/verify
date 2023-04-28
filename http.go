@@ -17,6 +17,7 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/rs/zerolog/log"
+	"gopkg.in/square/go-jose.v2"
 
 	sdk "github.com/pomerium/sdk-go"
 )
@@ -122,6 +123,7 @@ func (srv *Server) serveAPIVerifyInfo(w http.ResponseWriter, r *http.Request) {
 			tlsErrStr = e.Error()
 		}
 	} else {
+		res["identity"] = getUnverifiedIdentity(r)
 		res["error"] = err.Error()
 	}
 	res["request"] = M{
@@ -134,6 +136,23 @@ func (srv *Server) serveAPIVerifyInfo(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(res)
+}
+
+func getUnverifiedIdentity(r *http.Request) *sdk.Identity {
+	identity := new(sdk.Identity)
+	jwt, err := jose.ParseSigned(sdk.TokenFromHeader(r))
+	if err != nil {
+		log.Err(err).Msg("error parsing JWT assertion header")
+		return identity
+	}
+
+	err = json.Unmarshal(jwt.UnsafePayloadWithoutVerification(), identity)
+	if err != nil {
+		log.Err(err).Msg("error unmarshaling JWT assertion header")
+		return identity
+	}
+
+	return identity
 }
 
 func getHostname() string {
