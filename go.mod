@@ -7,7 +7,7 @@ require (
 	github.com/go-chi/chi v4.1.2+incompatible
 	github.com/hashicorp/golang-lru v0.5.4
 	github.com/ory/dockertest/v3 v3.10.0
-	github.com/pomerium/sdk-go v0.0.8-0.20230428172757-96e02f24cce9
+	github.com/pomerium/sdk-go v0.0.8
 	github.com/pomerium/webauthn v0.0.0-20211014213840-422c7ce1077f
 	github.com/rs/zerolog v1.29.1
 	github.com/stretchr/testify v1.8.2

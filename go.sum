@@ -518,8 +518,8 @@ github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZb
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/polyfloyd/go-errorlint v1.4.0 h1:b+sQ5HibPIAjEZwtuwU8Wz/u0dMZ7YL+bk+9yWyHVJk=
 github.com/polyfloyd/go-errorlint v1.4.0/go.mod h1:qJCkPeBn+0EXkdKTrUCcuFStM2xrDKfxI3MGLXPexUs=
-github.com/pomerium/sdk-go v0.0.8-0.20230428172757-96e02f24cce9 h1:jXGMNQlGPw2yIdIvcIQbxFyK3w0inmZOIuYAdm3Bwmk=
-github.com/pomerium/sdk-go v0.0.8-0.20230428172757-96e02f24cce9/go.mod h1:wlosq+eNsTGTAG4l2TvmvGFk2+RNuT3hVfnORlAusY4=
+github.com/pomerium/sdk-go v0.0.8 h1:T4HIsWGdS6CkKv1PRyezOmNkMljDA9ugukAZfL4HN6s=
+github.com/pomerium/sdk-go v0.0.8/go.mod h1:wlosq+eNsTGTAG4l2TvmvGFk2+RNuT3hVfnORlAusY4=
 github.com/pomerium/webauthn v0.0.0-20211014213840-422c7ce1077f h1:442shkoI4Oh4RHdzFaGma1t9Ji/T+8pfCxQQzmY5kj8=
 github.com/pomerium/webauthn v0.0.0-20211014213840-422c7ce1077f/go.mod h1:wgH3ualWdXu/qwbhOoSQedXzco+38Iz7qKKGCJcKPXg=
 github.com/prometheus/client_golang v0.9.1/go.mod h1:7SWBe2y4D6OKWSNQJUaRYU/AaXPKyh/dDVn+NZz0KFw=
