@@ -18,6 +18,7 @@ import (
 	"github.com/go-chi/chi/middleware"
 	"github.com/rs/zerolog/log"
 	"gopkg.in/square/go-jose.v2"
+	"gopkg.in/square/go-jose.v2/jwt"
 
 	sdk "github.com/pomerium/sdk-go"
 )
@@ -25,18 +26,26 @@ import (
 //go:embed ui/dist
 var uiFS embed.FS
 
-func (srv *Server) initRouter(jwksEndpoint string) {
+func (srv *Server) initRouter() {
 	transport := http.DefaultTransport.(*http.Transport).Clone()
 	transport.DialTLSContext = srv.tlsVerifier.DialTLSContext
 	client := &http.Client{
 		Transport: transport,
 	}
 
+	expected := &jwt.Expected{
+		Issuer: srv.cfg.expectedJWTIssuer,
+	}
+	if aud := srv.cfg.expectedJWTAudience; aud != "" {
+		expected.Audience = jwt.Audience([]string{aud})
+	}
+
 	verifier, err := sdk.New(&sdk.Options{
 		Datastore:    NewCache(1024),
 		HTTPClient:   client,
 		Logger:       stdlog.New(log.With().Logger(), "", 0),
-		JWKSEndpoint: jwksEndpoint,
+		JWKSEndpoint: srv.cfg.jwksEndpoint,
+		Expected:     expected,
 	})
 	if err != nil {
 		log.Fatal().Err(err).Send()
