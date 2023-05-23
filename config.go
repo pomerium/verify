@@ -10,9 +10,11 @@ var (
 )
 
 type config struct {
-	bindAddress        string
-	firestoreProjectID string
-	jwksEndpoint       string
+	bindAddress         string
+	firestoreProjectID  string
+	jwksEndpoint        string
+	expectedJWTIssuer   string
+	expectedJWTAudience string
 }
 
 // An Option customizes the config.
@@ -29,6 +31,22 @@ func WithBindAddress(bindAddress string) Option {
 func WithJWKSEndpoint(jwksEndpoint string) Option {
 	return func(cfg *config) {
 		cfg.jwksEndpoint = jwksEndpoint
+	}
+}
+
+// WithExpectedJWTIssuer sets the expected JWT issuer claim in the config. If
+// set to the empty string, the issuer claim will not be validated.
+func WithExpectedJWTIssuer(issuer string) Option {
+	return func(cfg *config) {
+		cfg.expectedJWTIssuer = issuer
+	}
+}
+
+// WithExpectedJWTAudience sets the expected JWT audience claim in the config.
+// If set to the empty string, the audience claim will not be validated.
+func WithExpectedJWTAudience(audience string) Option {
+	return func(cfg *config) {
+		cfg.expectedJWTAudience = audience
 	}
 }
 

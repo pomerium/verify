@@ -31,6 +31,8 @@ func main() {
 		verify.WithBindAddress(addr),
 		verify.WithFirestoreProjectID(firestoreProjectID),
 		verify.WithJWKSEndpoint(jwksEndpoint),
+		verify.WithExpectedJWTIssuer(os.Getenv("EXPECTED_JWT_ISSUER")),
+		verify.WithExpectedJWTAudience(os.Getenv("EXPECTED_JWT_AUDIENCE")),
 	)
 	err := srv.Run(context.Background())
 	if err != nil {

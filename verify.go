@@ -61,7 +61,7 @@ func (srv *Server) init(ctx context.Context) error {
 		srv.storage = storage.NewInMemoryBackend()
 	}
 
-	srv.initRouter(srv.cfg.jwksEndpoint)
+	srv.initRouter()
 
 	srv.http = &http.Server{
 		Addr: srv.cfg.bindAddress,
