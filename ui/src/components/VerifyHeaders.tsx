@@ -13,7 +13,9 @@ const VerifyHeaders: FC<Props> = ({ info }) => {
       <div className="messages">
         <div className="box-inner">
           <div className="category-header clearfix">
-            <span className="category-title">Unsigned Identity Headers</span>
+            <span className="category-title">Unsigned Identity Headers
+              (<code>X-Pomerium-Claim-*</code>)
+            </span>
             <a href="/headers">
               <span className="json-icon"></span>
             </a>
@@ -27,7 +29,7 @@ const VerifyHeaders: FC<Props> = ({ info }) => {
                 </tr>
               </thead>
               <tbody>
-                {headers?.map(([k, vs]) => {
+                {headers?.map(([k, vs]) =>
                   <tr key={k}>
                     <td>{k}</td>
                     <td>
@@ -35,8 +37,8 @@ const VerifyHeaders: FC<Props> = ({ info }) => {
                         <p key={v}>{v}</p>
                       ))}
                     </td>
-                  </tr>;
-                })}
+                  </tr>
+                )}
               </tbody>
             </table>
           ) : (
@@ -49,7 +51,7 @@ const VerifyHeaders: FC<Props> = ({ info }) => {
             passing identity{' '}
           </a>{' '}
           to upstream applications as HTTP request headers. Note, unlike{' '}
-          <code>x-pomerium-jwt-assertion</code> these headers are
+          <code>X-Pomerium-Jwt-Assertion</code> these headers are{' '}
           <strong>not signed</strong>.
         </div>
       </div>
