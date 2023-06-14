@@ -19,6 +19,7 @@ export type VerifyInfoIdentity = {
   groups?: string[];
   user?: string;
   email?: string;
+  name?: string;
   raw_jwt?: string;
   public_key?: string;
 };
