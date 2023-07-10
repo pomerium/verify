@@ -16,9 +16,9 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
+	"github.com/go-jose/go-jose/v3"
+	"github.com/go-jose/go-jose/v3/jwt"
 	"github.com/rs/zerolog/log"
-	"gopkg.in/square/go-jose.v2"
-	"gopkg.in/square/go-jose.v2/jwt"
 
 	sdk "github.com/pomerium/sdk-go"
 )
@@ -40,8 +40,13 @@ func (srv *Server) initRouter() {
 		expected.Audience = jwt.Audience([]string{aud})
 	}
 
+	datastore, err := sdk.NewLRUKeyStore(1024)
+	if err != nil {
+		log.Fatal().Err(err).Send()
+	}
+
 	verifier, err := sdk.New(&sdk.Options{
-		Datastore:    NewCache(1024),
+		Datastore:    datastore,
 		HTTPClient:   client,
 		Logger:       stdlog.New(log.With().Logger(), "", 0),
 		JWKSEndpoint: srv.cfg.jwksEndpoint,

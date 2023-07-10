@@ -84,6 +84,10 @@ const VerifyIdentityToken: FC<Props> = ({ info }) => {
                   <td>{info?.identity?.jti}</td>
                 </tr>
                 <tr>
+                  <td>Name</td>
+                  <td>{info?.identity?.name}</td>
+                </tr>
+                <tr>
                   <td>Groups</td>
                   <td>
                     {makeUnique(info?.identity?.groups).map((v) => (
