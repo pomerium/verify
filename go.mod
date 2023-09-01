@@ -3,7 +3,7 @@ module github.com/pomerium/verify
 go 1.20
 
 require (
-	cloud.google.com/go/firestore v1.11.0
+	cloud.google.com/go/firestore v1.12.0
 	github.com/go-chi/chi v4.1.2+incompatible
 	github.com/go-jose/go-jose/v3 v3.0.0
 	github.com/ory/dockertest/v3 v3.10.0
