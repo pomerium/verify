@@ -18,7 +18,7 @@
     "@emotion/styled": "^11.11.0",
     "@mui/material": "^5.14.7",
     "base64-arraybuffer": "^1.0.2",
-    "prettier": "^2.8.8",
+    "prettier": "^3.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "typescript": "^5.2.2"
