@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="/index.css" />
     <link rel="icon" type="image/png" href="/img/logo-only.svg" />
 
+    {{ if .IncludeGoogleTagManager }}
     <!-- Google Tag Manager -->
     <script>
       (function (w, d, s, l, i) {
@@ -20,21 +21,24 @@
         j.async = true;
         j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
         f.parentNode.insertBefore(j, f);
-      })(window, document, 'script', 'dataLayer', 'GTM-5JMBB8K');
+      })(window, document, 'script', 'dataLayer', '{{ .GoogleTagManagerID }}');
     </script>
     <!-- End Google Tag Manager -->
+    {{ end }}
   </head>
   <body>
+    {{ if .IncludeGoogleTagManager }}
     <!-- Google Tag Manager (noscript) -->
     <noscript
       ><iframe
-        src="https://www.googletagmanager.com/ns.html?id=GTM-5JMBB8K"
+        src="https://www.googletagmanager.com/ns.html?id={{ .GoogleTagManagerID }}"
         height="0"
         width="0"
         style="display: none; visibility: hidden"
       ></iframe
     ></noscript>
     <!-- End Google Tag Manager (noscript) -->
+    {{ end }}
 
     <main id="main"></main>
     <script src="/index.js"></script>

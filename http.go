@@ -1,10 +1,12 @@
 package verify
 
 import (
+	"bytes"
 	"crypto/sha256"
 	"embed"
 	"encoding/hex"
 	"encoding/json"
+	"html/template"
 	"io"
 	"io/fs"
 	stdlog "log"
@@ -107,6 +109,11 @@ func (srv *Server) serveHeaders(w http.ResponseWriter, r *http.Request) {
 }
 
 func (srv *Server) serveStatic(w http.ResponseWriter, r *http.Request, name, etag string) {
+	if strings.HasSuffix(name, ".html") {
+		srv.serveTemplate(w, r, name, etag)
+		return
+	}
+
 	f, err := uiFS.Open(name)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -122,6 +129,37 @@ func (srv *Server) serveStatic(w http.ResponseWriter, r *http.Request, name, eta
 	w.Header().Set("Cache-Control", "no-cache")
 	w.Header().Set("Etag", `"`+etag+`"`)
 	http.ServeContent(w, r, path.Base(name), time.Time{}, rs)
+}
+
+func (srv *Server) serveTemplate(w http.ResponseWriter, r *http.Request, name, etag string) {
+	bs, err := uiFS.ReadFile(name)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	tpl, err := template.New("").Parse(string(bs))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	data := map[string]any{}
+	if v, ok := os.LookupEnv("GOOGLE_TAG_MANAGER_ID"); ok {
+		data["IncludeGoogleTagManager"] = true
+		data["GoogleTagManagerID"] = v
+	}
+
+	var buf bytes.Buffer
+	err = tpl.Execute(&buf, data)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Cache-Control", "no-cache")
+	w.Header().Set("Etag", `"`+etag+`"`)
+	http.ServeContent(w, r, path.Base(name), time.Time{}, bytes.NewReader(buf.Bytes()))
 }
 
 func (srv *Server) serveAPIVerifyInfo(w http.ResponseWriter, r *http.Request) {
