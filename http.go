@@ -146,7 +146,6 @@ func (srv *Server) serveTemplate(w http.ResponseWriter, r *http.Request, name, e
 
 	data := map[string]any{}
 	if v, ok := os.LookupEnv("GOOGLE_TAG_MANAGER_ID"); ok {
-		data["IncludeGoogleTagManager"] = true
 		data["GoogleTagManagerID"] = v
 	}
 
