@@ -217,23 +217,20 @@ a:hover {
 /******* Header *******/
 
 .header {
-  padding: 30px 0;
-  height: 41px;
-  position: relative;
+  box-sizing: border-box;
+  padding: 37px 8px 34px 15px;
 }
 
 .header span {
   color: #6e43e8;
   font-size: 16px;
-  line-height: 31px;
-  position: absolute;
-  left: 255px;
-  top: 42px;
 }
 
 .heading {
-  float: left;
-  margin: 7px 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .statuses {
@@ -244,9 +241,10 @@ a:hover {
   display: inline-block;
   position: relative;
   background: url(/img/logo-long.svg) no-repeat;
-  width: 663px;
+  width: 230px;
   height: 26px;
   cursor: pointer;
+  margin-right: 8px;
 }
 
 .logo:hover {

@@ -1,3 +1,4 @@
+import LogoutIcon from '@mui/icons-material/Logout';
 import React, { FC, useEffect, useState } from 'react';
 
 import { fetchVerifyInfo, VerifyInfo } from '../api';
@@ -19,7 +20,15 @@ const Verify: FC = () => {
     <div className="inner">
       <div className="header clearfix">
         <div className="heading">
-          <a href="/" className="logo"></a> <span>{info?.request?.host}</span>
+          <div>
+            <a href="/" className="logo"></a>
+            <span>{info?.request?.host}</span>
+          </div>
+          <div>
+            <a href="/.pomerium/sign_out" title={'Logout'}>
+              <LogoutIcon />
+            </a>
+          </div>
         </div>
       </div>
 
