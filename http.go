@@ -33,6 +33,7 @@ func (srv *Server) initRouter() {
 	transport.DialTLSContext = srv.tlsVerifier.DialTLSContext
 	client := &http.Client{
 		Transport: transport,
+		Timeout:   maxRemoteWait,
 	}
 
 	expected := &jwt.Expected{
