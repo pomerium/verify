@@ -12,6 +12,8 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+const maxRemoteWait = 5 * time.Second
+
 type tlsVerifier struct {
 	mu     sync.Mutex
 	errors map[string]error
@@ -23,8 +25,8 @@ func newTLSVerifier() *tlsVerifier {
 
 func (v *tlsVerifier) DialTLSContext(ctx context.Context, network, addr string) (net.Conn, error) {
 	dialer := &net.Dialer{
-		Timeout:   30 * time.Second,
-		KeepAlive: 30 * time.Second,
+		Timeout:   maxRemoteWait,
+		KeepAlive: maxRemoteWait,
 		DualStack: true,
 	}
 	log.Info().Str("addr", addr).Msg("dialing")
