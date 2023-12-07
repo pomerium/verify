@@ -28,6 +28,11 @@ COPY ./internal/ ./internal/
 COPY ./*.go ./
 RUN make build-verify
 
+# # get the latest certificates
+# FROM debian:bookworm AS certificates
+# RUN apt update -q && apt install -yq ca-certificates && update-ca-certificates
+
 FROM gcr.io/distroless/base-debian12:debug@sha256:d2890b2740037c95fca7fe44c27e09e91f2e557c62cf0910d2569b0dedc98ddc
+# COPY --from=certificates /etc/ssl/certs /etc/ssl/certs
 COPY --from=build /build/bin/* /bin/
 ENTRYPOINT ["/bin/verify"]
