@@ -34,12 +34,13 @@ func New(options ...Option) *Server {
 
 // Run runs the server.
 func (srv *Server) Run(ctx context.Context) error {
+	eg, ctx := errgroup.WithContext(ctx)
+
 	err := srv.init(ctx)
 	if err != nil {
 		return err
 	}
 
-	eg, ctx := errgroup.WithContext(ctx)
 	eg.Go(func() error {
 		log.Info().
 			Str("bind-addr", srv.cfg.bindAddress).

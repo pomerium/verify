@@ -106,7 +106,7 @@ func (srv *Server) initRouter() {
 
 func (srv *Server) serveHeaders(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(r.Header)
+	_ = json.NewEncoder(w).Encode(r.Header)
 }
 
 func (srv *Server) serveStatic(w http.ResponseWriter, r *http.Request, name, etag string) {
@@ -187,7 +187,7 @@ func (srv *Server) serveAPIVerifyInfo(w http.ResponseWriter, r *http.Request) {
 		"tlsError": tlsErrStr,
 	}
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(res)
+	_ = json.NewEncoder(w).Encode(res)
 }
 
 func getUnverifiedIdentity(r *http.Request) *sdk.Identity {
