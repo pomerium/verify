@@ -1,4 +1,4 @@
-FROM node:lts-bookworm@sha256:5f21943fe97b24ae1740da6d7b9c56ac43fe3495acb47c1b232b0a352b02a25c as ui
+FROM node:lts-bookworm@sha256:8d0f16fe841577f9317ab49011c6d819e1fa81f8d4af7ece7ae0ac815e07ac84 as ui
 WORKDIR /build
 
 COPY Makefile ./Makefile
