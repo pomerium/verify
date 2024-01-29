@@ -11,6 +11,7 @@ import (
 	"io/fs"
 	stdlog "log"
 	"net/http"
+	"net/url"
 	"os"
 	"path"
 	"strings"
@@ -171,7 +172,14 @@ func (srv *Server) serveAPIVerifyInfo(w http.ResponseWriter, r *http.Request) {
 	var tlsErrStr string
 	if identity, err := sdk.FromContext(r.Context()); err == nil {
 		res["identity"] = identity
-		if e := srv.tlsVerifier.GetTLSError(identity.Issuer); e != nil {
+		jwksDomain := identity.Issuer
+		if srv.cfg.jwksEndpoint != "" {
+			u, err := url.Parse(srv.cfg.jwksEndpoint)
+			if err == nil {
+				jwksDomain = u.Hostname()
+			}
+		}
+		if e := srv.tlsVerifier.GetTLSError(jwksDomain); e != nil {
 			tlsErrStr = e.Error()
 		}
 	} else {
