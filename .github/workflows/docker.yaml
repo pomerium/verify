@@ -45,7 +45,7 @@ jobs:
 
       - name: gcloud sdk
         if: ${{ github.event_name != 'pull_request' }}
-        uses: google-github-actions/setup-gcloud@5a5f7b85fca43e76e53463acaa9d408a03c98d3a
+        uses: google-github-actions/setup-gcloud@98ddc00a17442e89a24bbf282954a3b65ce6d200
 
       - name: gcloud docker setup
         if: ${{ github.event_name != 'pull_request' }}
@@ -84,7 +84,7 @@ jobs:
           credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT }}
 
       - name: gcloud sdk
-        uses: google-github-actions/setup-gcloud@5a5f7b85fca43e76e53463acaa9d408a03c98d3a
+        uses: google-github-actions/setup-gcloud@98ddc00a17442e89a24bbf282954a3b65ce6d200
 
       - name: deploy to cloud run
         uses: google-github-actions/deploy-cloudrun@b4a4335d697d5be41e5fa97dca581f479d4eb438
