@@ -87,7 +87,7 @@ jobs:
         uses: google-github-actions/setup-gcloud@5a5f7b85fca43e76e53463acaa9d408a03c98d3a
 
       - name: deploy to cloud run
-        uses: google-github-actions/deploy-cloudrun@82a0d44f48151e2d393811779576ec6ad902146b
+        uses: google-github-actions/deploy-cloudrun@b4a4335d697d5be41e5fa97dca581f479d4eb438
         if: ${{ github.event_name != 'pull_request' }}
         with:
           image: ${{ fromJSON(needs.publish.outputs.meta_json).tags[0] }}
