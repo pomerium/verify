@@ -20,15 +20,11 @@ const Verify: FC = () => {
     <div className="inner">
       <div className="header clearfix">
         <div className="heading">
-          <div>
-            <a href="/" className="logo"></a>
-            <span>{info?.request?.host}</span>
-          </div>
-          <div>
-            <a href="/.pomerium/sign_out" title={'Logout'}>
-              <LogoutIcon />
-            </a>
-          </div>
+          <a href="/" className="logo"></a>
+          <span className="hostname">{info?.request?.host}</span>
+          <a href="/.pomerium/sign_out" title={'Logout'}>
+            <LogoutIcon />
+          </a>
         </div>
       </div>
 
