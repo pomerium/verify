@@ -233,6 +233,10 @@ a:hover {
   width: 100%;
 }
 
+.hostname {
+  flex: 1;
+}
+
 .statuses {
   float: left;
 }
@@ -241,10 +245,10 @@ a:hover {
   display: inline-block;
   position: relative;
   background: url(/img/logo-long.svg) no-repeat;
-  width: 230px;
-  height: 26px;
+  width: 162px;
+  height: 32px;
   cursor: pointer;
-  margin-right: 8px;
+  margin-right: 12px;
 }
 
 .logo:hover {
