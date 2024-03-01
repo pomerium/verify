@@ -10,7 +10,7 @@ require (
 	github.com/pomerium/sdk-go v0.0.9
 	github.com/pomerium/webauthn v0.0.0-20221118023040-00a9c430578b
 	github.com/rs/zerolog v1.32.0
-	github.com/stretchr/testify v1.8.4
+	github.com/stretchr/testify v1.9.0
 	golang.org/x/sync v0.6.0
 	google.golang.org/grpc v1.62.0
 )
