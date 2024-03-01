@@ -9,7 +9,7 @@ require (
 	github.com/ory/dockertest/v3 v3.10.0
 	github.com/pomerium/sdk-go v0.0.9
 	github.com/pomerium/webauthn v0.0.0-20221118023040-00a9c430578b
-	github.com/rs/zerolog v1.31.0
+	github.com/rs/zerolog v1.32.0
 	github.com/stretchr/testify v1.8.4
 	golang.org/x/sync v0.6.0
 	google.golang.org/grpc v1.61.0
