@@ -28,6 +28,6 @@ COPY ./internal/ ./internal/
 COPY ./*.go ./
 RUN make build-verify
 
-FROM gcr.io/distroless/base-debian12:debug@sha256:1d91d5f201f4be1ab11bdbcd3ef9d1a42bdfd29863bb007eba11eaa55172f85d
+FROM gcr.io/distroless/base-debian12:debug@sha256:e0cc8fa0ed6c46f7f019678218f8b7efdc7df09638ee49f586fb4f0fdf8b09ae
 COPY --from=build /build/bin/* /bin/
 ENTRYPOINT ["/bin/verify"]
