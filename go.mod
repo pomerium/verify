@@ -5,7 +5,7 @@ go 1.20
 require (
 	cloud.google.com/go/firestore v1.14.0
 	github.com/go-chi/chi v4.1.2+incompatible
-	github.com/go-jose/go-jose/v3 v3.0.2
+	github.com/go-jose/go-jose/v3 v3.0.3
 	github.com/ory/dockertest/v3 v3.10.0
 	github.com/pomerium/sdk-go v0.0.9
 	github.com/pomerium/webauthn v0.0.0-20221118023040-00a9c430578b
