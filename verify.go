@@ -2,8 +2,10 @@ package verify
 
 import (
 	"context"
+	"crypto/x509"
 	"net"
 	"net/http"
+	"os"
 
 	"cloud.google.com/go/firestore"
 	"github.com/go-chi/chi"
@@ -26,9 +28,30 @@ type Server struct {
 // New creates a new Server.
 func New(options ...Option) *Server {
 	cfg := getConfig(options...)
+
+	var verifierOpts tlsVerifierOptions
+	if len(cfg.extraCACerts) > 0 {
+		pool, err := x509.SystemCertPool()
+		if err != nil {
+			log.Fatal().Err(err).Msg("failed to load system CA certs")
+		}
+		for _, certPath := range cfg.extraCACerts {
+			cert, err := os.ReadFile(certPath)
+			if err != nil {
+				log.Fatal().Err(err).Str("path", certPath).Msg("failed to read CA cert")
+			} else {
+				log.Info().Str("path", certPath).Msg("adding extra CA cert")
+			}
+			ok := pool.AppendCertsFromPEM(cert)
+			if !ok {
+				log.Warn().Str("path", certPath).Msg("no CA certs found in file")
+			}
+		}
+		verifierOpts.rootCAs = pool
+	}
 	return &Server{
 		cfg:         cfg,
-		tlsVerifier: newTLSVerifier(),
+		tlsVerifier: newTLSVerifier(verifierOpts),
 	}
 }
 

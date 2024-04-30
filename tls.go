@@ -14,13 +14,21 @@ import (
 
 const maxRemoteWait = 5 * time.Second
 
+type tlsVerifierOptions struct {
+	rootCAs *x509.CertPool
+}
+
 type tlsVerifier struct {
+	tlsVerifierOptions
 	mu     sync.Mutex
 	errors map[string]error
 }
 
-func newTLSVerifier() *tlsVerifier {
-	return &tlsVerifier{errors: make(map[string]error)}
+func newTLSVerifier(opts tlsVerifierOptions) *tlsVerifier {
+	return &tlsVerifier{
+		tlsVerifierOptions: opts,
+		errors:             make(map[string]error),
+	}
 }
 
 func (v *tlsVerifier) DialTLSContext(ctx context.Context, network, addr string) (net.Conn, error) {
@@ -57,6 +65,7 @@ func (v *tlsVerifier) VerifyPeerCertificate(serverName string, rawCerts [][]byte
 
 	opts := x509.VerifyOptions{
 		DNSName:       serverName,
+		Roots:         v.rootCAs,
 		Intermediates: x509.NewCertPool(),
 	}
 	for _, cert := range certs[1:] {

@@ -15,6 +15,7 @@ type config struct {
 	jwksEndpoint        string
 	expectedJWTIssuer   string
 	expectedJWTAudience string
+	extraCACerts        []string
 }
 
 // An Option customizes the config.
@@ -54,6 +55,15 @@ func WithExpectedJWTAudience(audience string) Option {
 func WithFirestoreProjectID(projectID string) Option {
 	return func(cfg *config) {
 		cfg.firestoreProjectID = projectID
+	}
+}
+
+// WithExtraCACerts adds paths to custom CA certificates to the config.
+// Certificates added with this option will be used in addition to the system
+// default pool.
+func WithExtraCACerts(paths ...string) Option {
+	return func(cfg *config) {
+		cfg.extraCACerts = append(cfg.extraCACerts, paths...)
 	}
 }
 
