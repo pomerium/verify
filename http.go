@@ -63,6 +63,10 @@ func (srv *Server) initRouter() {
 	srv.router = chi.NewRouter()
 	srv.router.Use(sdk.AddIdentityToRequest(verifier))
 
+	srv.router.Get("/healthz", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	})
+
 	// mount api
 	srv.router.Route("/api", func(r chi.Router) {
 		r.Use(middleware.NoCache)
