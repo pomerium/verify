@@ -1,0 +1,90 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pomerium-verify
+  namespace: pomerium
+  labels:
+    app.kubernetes.io/name: pomerium-verify
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: pomerium-verify
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: pomerium-verify
+    spec:
+      containers:
+        - name: pomerium-verify
+          image: pomerium/verify:latest
+          env:
+            - name: PORT
+              value: "8000"
+            - name: EXTRA_CA_CERTS
+              value: /var/run/pomerium-verify/ca.crt
+          ports:
+            - name: http
+              protocol: TCP
+              containerPort: 8000
+          volumeMounts:
+            - name: pomerium-verify-ca-cert
+              mountPath: /var/run/pomerium-verify/
+              readOnly: true
+          resources:
+            requests:
+              cpu: 100m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi
+          securityContext:
+            capabilities:
+              drop:
+                - ALL
+            runAsNonRoot: true
+            runAsUser: 65532
+            runAsGroup: 65532
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8000
+            initialDelaySeconds: 2
+            periodSeconds: 10
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 3
+      volumes:
+        - name: pomerium-verify-ca-cert
+          secret:
+            secretName: pomerium-verify-ca-cert
+            items:
+              - key: ca.crt
+                path: ca.crt
+            defaultMode: 0444
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pomerium-verify
+  namespace: pomerium
+spec:
+  selector:
+    app.kubernetes.io/name: pomerium-verify
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 8000
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: pomerium-verify-ca-cert
+  namespace: pomerium
+type: Opaque
+data:
+  ca.crt: |
+    (your pem-encoded CA certificate)

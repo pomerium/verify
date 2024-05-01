@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: verify
+  namespace: pomerium
+  annotations:
+    ingress.pomerium.io/pass_identity_headers: "true"
+    ingress.pomerium.io/allow_any_authenticated_user: "true"
+spec:
+  ingressClassName: pomerium
+  rules:
+    - host: verify.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: pomerium-verify
+                port:
+                  name: http
