@@ -14,7 +14,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b
+        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
 
       - name: Docker Meta
         id: meta
@@ -38,7 +38,7 @@ jobs:
 
       - name: gcloud authenticate
         if: ${{ github.event_name != 'pull_request' }}
-        uses: google-github-actions/auth@55bd3a7c6e2ae7cf1877fd1ccb9d54c0503c457c
+        uses: google-github-actions/auth@71fee32a0bb7e97b4d33d548e7d957010649d8fa
         with:
           project_id: ${{ secrets.GCP_PRODUCTION_PROJECT_ID }}
           credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT }}
@@ -53,7 +53,7 @@ jobs:
 
       - name: Login to DockerHub
         if: ${{ github.event_name != 'pull_request' }}
-        uses: docker/login-action@e92390c5fb421da1463c202d546fed0ec5c39f20
+        uses: docker/login-action@0d4c9c5ea7693da7b068278f7b52bda2a190a446
         with:
           username: ${{ secrets.DOCKERHUB_USER }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -75,10 +75,10 @@ jobs:
     needs: publish
     steps:
       - name: checkout
-        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b
+        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
 
       - name: gcloud authenticate
-        uses: google-github-actions/auth@55bd3a7c6e2ae7cf1877fd1ccb9d54c0503c457c
+        uses: google-github-actions/auth@71fee32a0bb7e97b4d33d548e7d957010649d8fa
         with:
           project_id: ${{ secrets.GCP_PRODUCTION_PROJECT_ID }}
           credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT }}
@@ -87,7 +87,7 @@ jobs:
         uses: google-github-actions/setup-gcloud@98ddc00a17442e89a24bbf282954a3b65ce6d200
 
       - name: deploy to cloud run
-        uses: google-github-actions/deploy-cloudrun@01165691411082692bd7be1d46205239385177d4
+        uses: google-github-actions/deploy-cloudrun@733e7b3262836985cf714bf611234120a6cf2e8c
         if: ${{ github.event_name != 'pull_request' }}
         with:
           image: ${{ fromJSON(needs.publish.outputs.meta_json).tags[0] }}
