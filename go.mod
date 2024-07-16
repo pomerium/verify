@@ -1,6 +1,6 @@
 module github.com/pomerium/verify
 
-go 1.20
+go 1.22.0
 
 require (
 	cloud.google.com/go/firestore v1.15.0
@@ -8,7 +8,7 @@ require (
 	github.com/go-jose/go-jose/v3 v3.0.3
 	github.com/ory/dockertest/v3 v3.10.0
 	github.com/pomerium/sdk-go v0.0.9
-	github.com/pomerium/webauthn v0.0.0-20221118023040-00a9c430578b
+	github.com/pomerium/webauthn v0.0.0-20240705200407-5829ef018013
 	github.com/rs/zerolog v1.33.0
 	github.com/stretchr/testify v1.9.0
 	golang.org/x/sync v0.7.0
@@ -31,14 +31,14 @@ require (
 	github.com/docker/go-connections v0.4.0 // indirect
 	github.com/docker/go-units v0.4.0 // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
-	github.com/fxamacker/cbor/v2 v2.4.0 // indirect
+	github.com/fxamacker/cbor/v2 v2.7.0 // indirect
 	github.com/go-logr/logr v1.4.1 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-sql-driver/mysql v1.7.0 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/golang/protobuf v1.5.4 // indirect
-	github.com/google/go-tpm v0.3.3 // indirect
+	github.com/google/go-tpm v0.9.1 // indirect
 	github.com/google/s2a-go v0.1.7 // indirect
 	github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510 // indirect
 	github.com/google/uuid v1.6.0 // indirect
@@ -84,7 +84,6 @@ require (
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240318140521-94a12d6c2237 // indirect
 	google.golang.org/protobuf v1.33.0 // indirect
 	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
-	gopkg.in/square/go-jose.v2 v2.6.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
