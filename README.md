@@ -27,7 +27,7 @@ the service will listen at `:8000`.
 
     Allows setting a static URL to use for fetching the public key(s) for
 verifying the Pomerium JWT. If unset, keys will be fetched from the domain
-specified in the JWT `aud` claim (using the internal Pomerium endpoint at
+specified in the JWT `iss` claim (using the internal Pomerium endpoint at
 `/.well-known/pomerium/jwks.json`). Note: in order for this to work correctly,
 you must define `signing_key` or `signing_key_file` in the Pomerium
 configuration.
