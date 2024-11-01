@@ -1,4 +1,4 @@
-FROM node:lts-bookworm@sha256:db5dd2f30cb82a8bdbd16acd4a8f3f2789f5b24f6ce43f98aa041be848c82e45 as ui
+FROM node:lts-bookworm@sha256:de4c8be8232b7081d8846360d73ce6dbff33c6636f2259cd14d82c0de1ac3ff2 as ui
 WORKDIR /build
 
 COPY Makefile ./Makefile
@@ -12,7 +12,7 @@ RUN make yarn
 COPY ./ui/ ./ui/
 RUN make build-ui
 
-FROM golang:1.23.1-bookworm@sha256:dba79eb312528369dea87532a65dbe9d4efb26439a0feacc9e7ac9b0f1c7f607 as build
+FROM golang:1.23.2-bookworm@sha256:2341ddffd3eddb72e0aebab476222fbc24d4a507c4d490a51892ec861bdb71fc as build
 WORKDIR /build
 
 COPY Makefile ./Makefile
@@ -28,6 +28,6 @@ COPY ./internal/ ./internal/
 COPY ./*.go ./
 RUN make build-verify
 
-FROM gcr.io/distroless/base-debian12:debug@sha256:662eaa2606087124ac1fc108291ecad341f6376ce6fa28ac7e1655ec76c6e6d9
+FROM gcr.io/distroless/base-debian12:debug@sha256:29160befd6389ab5784858ad88459281bac1dcd739ab74e3e80d1e1a23e3987e
 COPY --from=build /build/bin/* /bin/
 ENTRYPOINT ["/bin/verify"]
