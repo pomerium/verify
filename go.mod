@@ -1,6 +1,6 @@
 module github.com/pomerium/verify
 
-go 1.22.0
+go 1.23.3
 
 require (
 	cloud.google.com/go/firestore v1.17.0
@@ -9,10 +9,10 @@ require (
 	github.com/pomerium/sdk-go v0.0.9
 	github.com/pomerium/webauthn v0.0.0-20240705200407-5829ef018013
 	github.com/rs/zerolog v1.33.0
-	github.com/stretchr/testify v1.9.0
-	github.com/testcontainers/testcontainers-go v0.33.0
-	golang.org/x/sync v0.8.0
-	google.golang.org/grpc v1.67.1
+	github.com/stretchr/testify v1.10.0
+	github.com/testcontainers/testcontainers-go v0.34.0
+	golang.org/x/sync v0.9.0
+	google.golang.org/grpc v1.68.0
 )
 
 require (
@@ -28,7 +28,7 @@ require (
 	github.com/containerd/containerd v1.7.18 // indirect
 	github.com/containerd/log v0.1.0 // indirect
 	github.com/containerd/platforms v0.2.1 // indirect
-	github.com/cpuguy83/dockercfg v0.3.1 // indirect
+	github.com/cpuguy83/dockercfg v0.3.2 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/distribution/reference v0.6.0 // indirect
 	github.com/docker/docker v27.1.1+incompatible // indirect
@@ -78,11 +78,11 @@ require (
 	go.opentelemetry.io/otel v1.29.0 // indirect
 	go.opentelemetry.io/otel/metric v1.29.0 // indirect
 	go.opentelemetry.io/otel/trace v1.29.0 // indirect
-	golang.org/x/crypto v0.26.0 // indirect
-	golang.org/x/net v0.28.0 // indirect
-	golang.org/x/oauth2 v0.22.0 // indirect
-	golang.org/x/sys v0.24.0 // indirect
-	golang.org/x/text v0.17.0 // indirect
+	golang.org/x/crypto v0.27.0 // indirect
+	golang.org/x/net v0.29.0 // indirect
+	golang.org/x/oauth2 v0.23.0 // indirect
+	golang.org/x/sys v0.25.0 // indirect
+	golang.org/x/text v0.18.0 // indirect
 	golang.org/x/time v0.6.0 // indirect
 	google.golang.org/api v0.196.0 // indirect
 	google.golang.org/genproto v0.0.0-20240903143218-8af14fe29dc1 // indirect
