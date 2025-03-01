@@ -5,13 +5,13 @@ go 1.23.3
 require (
 	cloud.google.com/go/firestore v1.18.0
 	github.com/go-chi/chi v4.1.2+incompatible
-	github.com/go-jose/go-jose/v3 v3.0.3
+	github.com/go-jose/go-jose/v3 v3.0.4
 	github.com/pomerium/sdk-go v0.0.9
 	github.com/pomerium/webauthn v0.0.0-20240705200407-5829ef018013
 	github.com/rs/zerolog v1.33.0
 	github.com/stretchr/testify v1.10.0
 	github.com/testcontainers/testcontainers-go v0.35.0
-	golang.org/x/sync v0.10.0
+	golang.org/x/sync v0.11.0
 	google.golang.org/grpc v1.70.0
 )
 
