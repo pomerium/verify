@@ -40,7 +40,7 @@ func WithTestFirestore(t *testing.T, f func(client *firestore.Client)) {
 	container, err := testcontainers.GenericContainer(ctx, testcontainers.GenericContainerRequest{
 		ContainerRequest: testcontainers.ContainerRequest{
 			Name:         "pomerium-verify-firebase",
-			Image:        "andreysenov/firebase-tools:latest",
+			Image:        "andreysenov/firebase-tools:13.32.0",
 			ExposedPorts: []string{"8080/tcp"},
 			Cmd: []string{
 				"firebase",
