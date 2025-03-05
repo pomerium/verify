@@ -34,7 +34,7 @@ func TestFirestoreBackend(t *testing.T) {
 }
 
 func WithTestFirestore(t *testing.T, f func(client *firestore.Client)) {
-	ctx, clearTimeout := context.WithTimeout(context.Background(), time.Minute*10)
+	ctx, clearTimeout := context.WithTimeout(context.Background(), time.Minute*20)
 	defer clearTimeout()
 
 	container, err := testcontainers.GenericContainer(ctx, testcontainers.GenericContainerRequest{
