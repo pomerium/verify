@@ -10,6 +10,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/testcontainers/testcontainers-go"
+	"github.com/testcontainers/testcontainers-go/log"
 	"github.com/testcontainers/testcontainers-go/wait"
 
 	"github.com/pomerium/webauthn"
@@ -33,13 +34,13 @@ func TestFirestoreBackend(t *testing.T) {
 }
 
 func WithTestFirestore(t *testing.T, f func(client *firestore.Client)) {
-	ctx, clearTimeout := context.WithTimeout(context.Background(), time.Minute*10)
+	ctx, clearTimeout := context.WithTimeout(context.Background(), time.Minute*20)
 	defer clearTimeout()
 
 	container, err := testcontainers.GenericContainer(ctx, testcontainers.GenericContainerRequest{
 		ContainerRequest: testcontainers.ContainerRequest{
 			Name:         "pomerium-verify-firebase",
-			Image:        "andreysenov/firebase-tools:latest",
+			Image:        "andreysenov/firebase-tools:13.32.0",
 			ExposedPorts: []string{"8080/tcp"},
 			Cmd: []string{
 				"firebase",
@@ -49,7 +50,7 @@ func WithTestFirestore(t *testing.T, f func(client *firestore.Client)) {
 			},
 			WaitingFor: wait.ForAll(
 				wait.ForListeningPort("8080"),
-				wait.ForLog("Emulator Hub running"),
+				wait.ForLog("All emulators ready!"),
 			),
 			Files: []testcontainers.ContainerFile{{
 				HostFilePath:      "../../firebase.json",
@@ -58,7 +59,7 @@ func WithTestFirestore(t *testing.T, f func(client *firestore.Client)) {
 			}},
 		},
 		Started: true,
-		Logger:  testcontainers.TestLogger(t),
+		Logger:  log.TestLogger(t),
 		Reuse:   true,
 	})
 	require.NoError(t, err)

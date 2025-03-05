@@ -17,14 +17,5 @@ jobs:
         with:
           go-version: 1.23.x
 
-      - name: setup node
-        uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a
-
-      - name: install firestore emulator
-        run: |
-          npm i -g firebase firebase-tools
-          firebase setup:emulators:firestore
-
-      - name: test
-        run: |
-          firebase emulators:exec --only firestore --project test 'make test'
+      - name: Test
+        run: make test
