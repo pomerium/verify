@@ -10,6 +10,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/testcontainers/testcontainers-go"
+	"github.com/testcontainers/testcontainers-go/log"
 	"github.com/testcontainers/testcontainers-go/wait"
 
 	"github.com/pomerium/webauthn"
@@ -58,7 +59,7 @@ func WithTestFirestore(t *testing.T, f func(client *firestore.Client)) {
 			}},
 		},
 		Started: true,
-		Logger:  testcontainers.TestLogger(t),
+		Logger:  log.TestLogger(t),
 		Reuse:   true,
 	})
 	require.NoError(t, err)
