@@ -50,7 +50,7 @@ func WithTestFirestore(t *testing.T, f func(client *firestore.Client)) {
 			},
 			WaitingFor: wait.ForAll(
 				wait.ForListeningPort("8080"),
-				wait.ForLog("Emulator Hub running"),
+				wait.ForLog("All emulators ready!"),
 			),
 			Files: []testcontainers.ContainerFile{{
 				HostFilePath:      "../../firebase.json",

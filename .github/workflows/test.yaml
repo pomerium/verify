@@ -17,5 +17,5 @@ jobs:
         with:
           go-version: 1.23.x
 
-      - name: install firestore emulator
+      - name: Test
         run: make test
