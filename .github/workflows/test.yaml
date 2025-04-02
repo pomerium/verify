@@ -1,6 +1,8 @@
 name: Test
+
 permissions:
   contents: read
+
 on:
   push:
     branches:
@@ -9,13 +11,25 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
 
       - uses: actions/setup-go@0aaccfd150d50ccaeb58ebd88d36e91967a5f35b
         with:
-          go-version: 1.23.x
+          go-version: 1.24.x
 
-      - name: Test
-        run: make test
+      - name: test
+        run: make cover
+
+      - uses: jandelgado/gcov2lcov-action@4e1989767862652e6ca8d3e2e61aabe6d43be28b
+        name: convert coverage to lcov
+        with:
+          infile: coverage.txt
+          outfile: coverage.lcov
+
+      - name: upload to coveralls
+        uses: coverallsapp/github-action@648a8eb78e6d50909eff900e4ec85cab4524a45b
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: coverage.lcov

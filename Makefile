@@ -30,9 +30,15 @@ yarn:
 	cd ui; $(YARN) --network-timeout 100000
 
 # Run go tests
+.PHONY: test
 test:
 	@echo "==> $@"
 	go test -v ./...
+
+.PHONY: cover
+cover: ## Runs go test with coverage
+	@echo "==> $@"
+	@go test -race -coverprofile=coverage.txt ./...
 
 .PHONY: lint
 lint:
