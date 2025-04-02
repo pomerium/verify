@@ -1,7 +1,6 @@
 module github.com/pomerium/verify
 
 go 1.23.3
-toolchain go1.24.1
 
 require (
 	cloud.google.com/go/firestore v1.18.0
