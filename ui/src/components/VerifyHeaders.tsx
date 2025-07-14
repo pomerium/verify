@@ -47,7 +47,7 @@ const VerifyHeaders: FC<Props> = ({ info }) => {
         </div>
         <div className="category-link">
           Pomerium allows{' '}
-          <a href="https://docs.pomerium.io/reference/#jwt-claim-headers">
+          <a href="https://www.pomerium.com/docs/reference/jwt-claim-headers">
             passing identity{' '}
           </a>{' '}
           to upstream applications as HTTP request headers. Note, unlike{' '}
