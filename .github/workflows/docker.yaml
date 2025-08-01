@@ -18,7 +18,7 @@ jobs:
 
       - name: Docker Meta
         id: meta
-        uses: docker/metadata-action@902fa8ec7d6ecbf8d84d538b9b233a880e428804
+        uses: docker/metadata-action@c1e51972afc2121e065aed6d45c65596fe445f3f
         with:
           flavor: |
             latest=true
@@ -38,14 +38,14 @@ jobs:
 
       - name: gcloud authenticate
         if: ${{ github.event_name != 'pull_request' }}
-        uses: google-github-actions/auth@ba79af03959ebeac9769e648f473a284504d9193
+        uses: google-github-actions/auth@140bb5113ffb6b65a7e9b937a81fa96cf5064462
         with:
           project_id: ${{ secrets.GCP_PRODUCTION_PROJECT_ID }}
           credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT }}
 
       - name: gcloud sdk
         if: ${{ github.event_name != 'pull_request' }}
-        uses: google-github-actions/setup-gcloud@77e7a554d41e2ee56fc945c52dfd3f33d12def9a
+        uses: google-github-actions/setup-gcloud@6a7c903a70c8625ed6700fa299f5ddb4ca6022e9
 
       - name: gcloud docker setup
         if: ${{ github.event_name != 'pull_request' }}
@@ -78,16 +78,16 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
 
       - name: gcloud authenticate
-        uses: google-github-actions/auth@ba79af03959ebeac9769e648f473a284504d9193
+        uses: google-github-actions/auth@140bb5113ffb6b65a7e9b937a81fa96cf5064462
         with:
           project_id: ${{ secrets.GCP_PRODUCTION_PROJECT_ID }}
           credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT }}
 
       - name: gcloud sdk
-        uses: google-github-actions/setup-gcloud@77e7a554d41e2ee56fc945c52dfd3f33d12def9a
+        uses: google-github-actions/setup-gcloud@6a7c903a70c8625ed6700fa299f5ddb4ca6022e9
 
       - name: deploy to cloud run
-        uses: google-github-actions/deploy-cloudrun@9c5864eab7354d2e132307e685a2272655932799
+        uses: google-github-actions/deploy-cloudrun@147732842f8a61ce9bd3b3f8e9f6597fe991ad65
         if: ${{ github.event_name != 'pull_request' }}
         with:
           image: ${{ fromJSON(needs.publish.outputs.meta_json).tags[0] }}
