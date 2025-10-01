@@ -14,7 +14,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
 
       - name: Docker Meta
         id: meta
@@ -38,14 +38,14 @@ jobs:
 
       - name: gcloud authenticate
         if: ${{ github.event_name != 'pull_request' }}
-        uses: google-github-actions/auth@140bb5113ffb6b65a7e9b937a81fa96cf5064462
+        uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093
         with:
           project_id: ${{ secrets.GCP_PRODUCTION_PROJECT_ID }}
           credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT }}
 
       - name: gcloud sdk
         if: ${{ github.event_name != 'pull_request' }}
-        uses: google-github-actions/setup-gcloud@6a7c903a70c8625ed6700fa299f5ddb4ca6022e9
+        uses: google-github-actions/setup-gcloud@aa5489c8933f4cc7a4f7d45035b3b1440c9c10db
 
       - name: gcloud docker setup
         if: ${{ github.event_name != 'pull_request' }}
@@ -53,7 +53,7 @@ jobs:
 
       - name: Login to DockerHub
         if: ${{ github.event_name != 'pull_request' }}
-        uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772
+        uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef
         with:
           username: ${{ secrets.DOCKERHUB_USER }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -75,19 +75,19 @@ jobs:
     needs: publish
     steps:
       - name: checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
 
       - name: gcloud authenticate
-        uses: google-github-actions/auth@140bb5113ffb6b65a7e9b937a81fa96cf5064462
+        uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093
         with:
           project_id: ${{ secrets.GCP_PRODUCTION_PROJECT_ID }}
           credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT }}
 
       - name: gcloud sdk
-        uses: google-github-actions/setup-gcloud@6a7c903a70c8625ed6700fa299f5ddb4ca6022e9
+        uses: google-github-actions/setup-gcloud@aa5489c8933f4cc7a4f7d45035b3b1440c9c10db
 
       - name: deploy to cloud run
-        uses: google-github-actions/deploy-cloudrun@147732842f8a61ce9bd3b3f8e9f6597fe991ad65
+        uses: google-github-actions/deploy-cloudrun@2028e2d7d30a78c6910e0632e48dd561b064884d
         if: ${{ github.event_name != 'pull_request' }}
         with:
           image: ${{ fromJSON(needs.publish.outputs.meta_json).tags[0] }}
