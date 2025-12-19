@@ -28,9 +28,6 @@ jobs:
       - name: Update Pomerium Dependencies
         run: ./scripts/update-dependencies pomerium
 
-      - name: Generate
-        run: make generate
-
       - name: Check for Changes
         id: git-diff
         run: |
