@@ -27,8 +27,13 @@
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.2.1",
     "@types/react": "^18.2.21",
-    "@types/react-dom": "^17.0.11",
+    "@types/react-dom": "^18.3.7",
     "esbuild": "^0.25.0",
     "eslint": "8.48.0"
-  }
+  },
+  "engines": {
+    "node": ">=22.0.0",
+    "yarn": "YARN NO LONGER USED - use npm instead."
+  },
+  "packageManager": "npm@10.9.4"
 }
