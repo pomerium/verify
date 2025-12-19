@@ -5,9 +5,10 @@ import (
 	"io"
 	"net/http"
 
+	"github.com/rs/zerolog/log"
+
 	"github.com/pomerium/verify/internal/storage"
 	"github.com/pomerium/webauthn"
-	"github.com/rs/zerolog/log"
 )
 
 const maxBodySize = 4 * 1024 * 1024
