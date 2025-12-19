@@ -5,10 +5,11 @@ import (
 	"encoding/base64"
 
 	"cloud.google.com/go/firestore"
-	"github.com/pomerium/webauthn"
 	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+
+	"github.com/pomerium/webauthn"
 )
 
 const (

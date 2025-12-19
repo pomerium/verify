@@ -5,8 +5,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/pomerium/webauthn"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/pomerium/webauthn"
 )
 
 func TestInMemoryBackend(t *testing.T) {

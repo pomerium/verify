@@ -3,13 +3,9 @@ WORKDIR /build
 
 COPY Makefile ./Makefile
 
-# download yarn dependencies
-COPY ui/yarn.lock ./ui/yarn.lock
-COPY ui/package.json ./ui/package.json
-RUN make yarn
-
 # build ui
 COPY ./ui/ ./ui/
+RUN make npm-install
 RUN make build-ui
 
 FROM golang:1.25.3-bookworm@sha256:ee420c17fa013f71eca6b35c3547b854c838d4f26056a34eb6171bba5bf8ece4 AS build

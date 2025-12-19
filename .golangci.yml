@@ -1,0 +1,20 @@
+version: "2"
+linters:
+  exclusions:
+    generated: lax
+    presets:
+      - comments
+      - std-error-handling
+      - common-false-positives
+      - legacy
+formatters:
+  enable:
+    - gofumpt
+    - goimports
+  settings:
+    gci:
+      sections:
+        - standard
+        - default
+        - prefix(github.com/pomerium)
+      custom-order: true
