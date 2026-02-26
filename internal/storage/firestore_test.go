@@ -1,10 +1,8 @@
 package storage
 
 import (
-	"context"
 	"net"
 	"testing"
-	"time"
 
 	"cloud.google.com/go/firestore"
 	"github.com/stretchr/testify/assert"
@@ -17,59 +15,45 @@ import (
 )
 
 func TestFirestoreBackend(t *testing.T) {
-	ctx, clearTimeout := context.WithTimeout(context.Background(), time.Minute*10)
-	defer clearTimeout()
+	client := StartFirestore(t)
 
-	WithTestFirestore(t, func(client *firestore.Client) {
-		backend := NewFirestoreBackend(client)
-		err := backend.SetCredential(ctx, &webauthn.Credential{
-			ID: []byte{1, 2, 3, 4},
-		})
-		assert.NoError(t, err)
-
-		cred, err := backend.GetCredential(ctx, []byte{1, 2, 3, 4})
-		assert.NoError(t, err)
-		assert.NotNil(t, cred)
+	backend := NewFirestoreBackend(client)
+	err := backend.SetCredential(t.Context(), &webauthn.Credential{
+		ID: []byte{1, 2, 3, 4},
 	})
+	assert.NoError(t, err)
+
+	cred, err := backend.GetCredential(t.Context(), []byte{1, 2, 3, 4})
+	assert.NoError(t, err)
+	assert.NotNil(t, cred)
 }
 
-func WithTestFirestore(t *testing.T, f func(client *firestore.Client)) {
-	ctx, clearTimeout := context.WithTimeout(context.Background(), time.Minute*20)
-	defer clearTimeout()
+func StartFirestore(tb testing.TB) *firestore.Client {
+	ctx := tb.Context()
 
-	container, err := testcontainers.GenericContainer(ctx, testcontainers.GenericContainerRequest{
-		ContainerRequest: testcontainers.ContainerRequest{
-			Name:         "pomerium-verify-firebase",
-			Image:        "andreysenov/firebase-tools:13.32.0",
-			ExposedPorts: []string{"8080/tcp"},
-			Cmd: []string{
-				"firebase",
-				"emulators:start",
-				"--project",
-				"test",
-			},
-			WaitingFor: wait.ForAll(
-				wait.ForListeningPort("8080"),
-				wait.ForLog("All emulators ready!"),
-			),
-			Files: []testcontainers.ContainerFile{{
-				HostFilePath:      "../../firebase.json",
-				ContainerFilePath: "/home/node/firebase.json",
-				FileMode:          0o644,
-			}},
-		},
-		Started: true,
-		Logger:  log.TestLogger(t),
-		Reuse:   true,
-	})
-	require.NoError(t, err)
+	container, err := testcontainers.Run(ctx, "andreysenov/firebase-tools:13.32.0",
+		testcontainers.WithLogger(log.TestLogger(tb)),
+		testcontainers.WithExposedPorts("8080/tcp"),
+		testcontainers.WithCmd("firebase", "emulators:start", "--project", "test"),
+		testcontainers.WithWaitStrategy(
+			wait.ForListeningPort("8080"),
+			wait.ForLog("All emulators ready!"),
+		),
+		testcontainers.WithFiles(testcontainers.ContainerFile{
+			HostFilePath:      "../../firebase.json",
+			ContainerFilePath: "/home/node/firebase.json",
+			FileMode:          0o644,
+		}),
+	)
+	require.NoError(tb, err)
 
-	mappedPort, err := container.MappedPort(ctx, "8080")
-	require.NoError(t, err)
+	host, err := container.Host(ctx)
+	require.NoError(tb, err)
+	port, err := container.MappedPort(ctx, "8080")
+	require.NoError(tb, err)
+	tb.Setenv("FIRESTORE_EMULATOR_HOST", net.JoinHostPort(host, port.Port()))
 
-	t.Setenv("FIRESTORE_EMULATOR_HOST", net.JoinHostPort("127.0.0.1", mappedPort.Port()))
 	client, err := firestore.NewClient(ctx, "test")
-	require.NoError(t, err)
-
-	f(client)
+	require.NoError(tb, err)
+	return client
 }
