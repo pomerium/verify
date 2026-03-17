@@ -8,7 +8,7 @@ COPY ./ui/ ./ui/
 RUN make npm-install
 RUN make build-ui
 
-FROM golang:1.25.8-bookworm@sha256:7af46e70d2017aef0b4ce2422afbcf39af0511a61993103e948b61011233ec42 AS build
+FROM golang:1.25.8-bookworm@sha256:45aaee97bdc61507976d86b12f65fa8394e107caba1d13b961a15f63edf24ecd AS build
 WORKDIR /build
 
 COPY Makefile ./Makefile
