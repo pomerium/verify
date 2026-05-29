@@ -7,7 +7,7 @@ require (
 	github.com/go-chi/chi v4.1.2+incompatible
 	github.com/go-jose/go-jose/v3 v3.0.5
 	github.com/pomerium/sdk-go v0.0.9
-	github.com/pomerium/webauthn v0.0.0-20260508203114-e4bd6034c565
+	github.com/pomerium/webauthn v0.0.0-20260528204052-877913fd849b
 	github.com/rs/zerolog v1.35.1
 	github.com/stretchr/testify v1.11.1
 	github.com/testcontainers/testcontainers-go v0.42.0
@@ -24,7 +24,7 @@ require (
 	dario.cat/mergo v1.0.2 // indirect
 	github.com/Azure/go-ansiterm v0.0.0-20250102033503-faa5f7b0171c // indirect
 	github.com/Microsoft/go-winio v0.6.2 // indirect
-	github.com/ccoveille/go-safecast v1.8.2 // indirect
+	github.com/ccoveille/go-safecast/v2 v2.0.1 // indirect
 	github.com/cenkalti/backoff/v4 v4.3.0 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/containerd/errdefs v1.0.0 // indirect
