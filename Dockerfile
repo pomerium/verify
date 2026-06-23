@@ -1,4 +1,4 @@
-FROM node:22.22.3-bookworm@sha256:2d178f2785b96dfbf62a416ca2e40f50e30150b4ff3320d706f0d96e90600eb3 AS ui
+FROM node:22.23.0-bookworm@sha256:e0d149b4727ac0c20d9774e801e423d7a946a0bffced886f42cfe9cd3c67820a AS ui
 WORKDIR /build
 
 COPY Makefile ./Makefile
