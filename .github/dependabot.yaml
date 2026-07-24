@@ -29,3 +29,11 @@ updates:
       go:
         patterns:
           - "*"
+  - package-ecosystem: "npm"
+    directory: "/ui"
+    schedule:
+      interval: "weekly"
+    groups:
+      npm:
+        patterns:
+          - "*"
