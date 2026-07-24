@@ -1,4 +1,4 @@
-import { encodeUrl } from '@borderless/base64';
+import { encodeUrl } from "@borderless/base64";
 
 export type VerifyInfoRequest = {
   host: string;
@@ -31,10 +31,10 @@ export type VerifyInfo = {
 };
 
 export async function fetchVerifyInfo(): Promise<VerifyInfo> {
-  const response = await fetch('/api/verify-info', {
+  const response = await fetch("/api/verify-info", {
     headers: {
-      'Content-Type': 'application/json'
-    }
+      "Content-Type": "application/json",
+    },
   });
   const result = await response.json();
   return result as VerifyInfo;
@@ -62,24 +62,24 @@ export function toWebAuthnAuthenticateOptions(
       ArrayBuffer.isView(options.challenge)
         ? options.challenge.buffer
         : options.challenge
-    )
+    ),
   };
-  if ('allowCredentials' in options) {
+  if ("allowCredentials" in options) {
     obj.allowCredentials = options.allowCredentials.map((c) => ({
       id: encodeUrl(ArrayBuffer.isView(c.id) ? c.id.buffer : c.id),
-      type: c.type
+      type: c.type,
     }));
   }
-  if ('extensions' in options) {
+  if ("extensions" in options) {
     obj.extensions = Object.fromEntries(Object.entries(options.extensions));
   }
-  if ('rpId' in options) {
+  if ("rpId" in options) {
     obj.rpId = options.rpId;
   }
-  if ('timeout' in options) {
+  if ("timeout" in options) {
     obj.timeout = options.timeout;
   }
-  if ('userVerification' in options) {
+  if ("userVerification" in options) {
     obj.userVerification = options.userVerification;
   }
   return obj;
@@ -103,12 +103,12 @@ export type WebAuthnAuthenticateRequest = {
 export async function webAuthnAuthenticate(
   request: WebAuthnAuthenticateRequest
 ) {
-  const response = await fetch('/api/webauthn-authenticate', {
-    method: 'POST',
+  const response = await fetch("/api/webauthn-authenticate", {
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify(request)
+    body: JSON.stringify(request),
   });
   const text = await response.text();
   if (!response.ok) {
@@ -152,7 +152,7 @@ export function toWebAuthnRegisterOptions(
     pubKeyCredParams: options.pubKeyCredParams,
     rp: {
       id: options.rp.id,
-      name: options.rp.name
+      name: options.rp.name,
     },
     user: {
       id: encodeUrl(
@@ -161,35 +161,35 @@ export function toWebAuthnRegisterOptions(
           : options.user.id
       ),
       displayName: options.user.displayName,
-      name: options.user.name
-    }
+      name: options.user.name,
+    },
   };
-  if ('attestation' in options) {
+  if ("attestation" in options) {
     obj.attestation = options.attestation;
   }
-  if ('authenticatorSelection' in options) {
+  if ("authenticatorSelection" in options) {
     obj.authenticatorSelection = {};
     [
-      'authenticatorAttachment',
-      'requireResidentKey',
-      'residentKey',
-      'userVerification'
+      "authenticatorAttachment",
+      "requireResidentKey",
+      "residentKey",
+      "userVerification",
     ].forEach((k) => {
       if (k in options.authenticatorSelection) {
         obj.authenticatorSelection[k] = options.authenticatorSelection[k];
       }
     });
   }
-  if ('excludeCredentials' in options) {
+  if ("excludeCredentials" in options) {
     obj.excludeCredentials = options.excludeCredentials.map((c) => ({
       id: encodeUrl(ArrayBuffer.isView(c.id) ? c.id.buffer : c.id),
-      type: c.type
+      type: c.type,
     }));
   }
-  if ('extensions' in options) {
+  if ("extensions" in options) {
     obj.extensions = Object.fromEntries(Object.entries(options.extensions));
   }
-  if ('timeout' in options) {
+  if ("timeout" in options) {
     obj.timeout = options.timeout;
   }
   return obj;
@@ -209,12 +209,12 @@ export type WebAuthnRegisterRequest = {
 };
 
 export async function webAuthnRegister(request: WebAuthnRegisterRequest) {
-  const response = await fetch('/api/webauthn-register', {
-    method: 'POST',
+  const response = await fetch("/api/webauthn-register", {
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify(request)
+    body: JSON.stringify(request),
   });
   const text = await response.text();
   if (!response.ok) {

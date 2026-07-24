@@ -1,11 +1,11 @@
-import LogoutIcon from '@mui/icons-material/Logout';
-import React, { FC, useEffect, useState } from 'react';
+import LogoutIcon from "@mui/icons-material/Logout";
+import React, { FC, useEffect, useState } from "react";
 
-import { fetchVerifyInfo, VerifyInfo } from '../api';
-import VerifyHeaders from './VerifyHeaders';
-import VerifyIdentityToken from './VerifyIdentityToken';
-import VerifyRequestDetails from './VerifyRequestDetails';
-import VerifyStatus from './VerifyStatus';
+import { VerifyInfo, fetchVerifyInfo } from "../api";
+import VerifyHeaders from "./VerifyHeaders";
+import VerifyIdentityToken from "./VerifyIdentityToken";
+import VerifyRequestDetails from "./VerifyRequestDetails";
+import VerifyStatus from "./VerifyStatus";
 
 const Verify: FC = () => {
   const [info, setInfo] = useState<VerifyInfo>(null);
@@ -22,7 +22,7 @@ const Verify: FC = () => {
         <div className="heading">
           <a href="/" className="logo"></a>
           <span className="hostname">{info?.request?.host}</span>
-          <a href="/.pomerium/sign_out" title={'Logout'}>
+          <a href="/.pomerium/sign_out" title={"Logout"}>
             <LogoutIcon />
           </a>
         </div>

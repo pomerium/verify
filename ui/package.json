@@ -35,5 +35,15 @@
     "node": ">=22.0.0",
     "yarn": "YARN NO LONGER USED - use npm instead."
   },
+  "prettier": {
+    "plugins": [
+      "@trivago/prettier-plugin-sort-imports"
+    ],
+    "importOrder": [
+      "^[./]"
+    ],
+    "importOrderSeparation": true,
+    "importOrderSortSpecifiers": true
+  },
   "packageManager": "npm@10.9.4"
 }

@@ -1,27 +1,26 @@
-import { decode, encodeUrl } from '@borderless/base64';
-import Alert, { AlertColor } from '@mui/material/Alert';
-import Button from '@mui/material/Button';
-import Container from '@mui/material/Container';
-import FormControl from '@mui/material/FormControl';
-import Grid from '@mui/material/Grid';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import TextField from '@mui/material/TextField';
-import React, { FC, useState } from 'react';
-
+import { decode, encodeUrl } from "@borderless/base64";
+import Alert, { AlertColor } from "@mui/material/Alert";
+import Button from "@mui/material/Button";
+import Container from "@mui/material/Container";
+import FormControl from "@mui/material/FormControl";
+import Grid from "@mui/material/Grid";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import TextField from "@mui/material/TextField";
+import React, { FC, useState } from "react";
 import {
   toWebAuthnAuthenticateOptions,
   toWebAuthnRegisterOptions,
   webAuthnAuthenticate,
-  webAuthnRegister
-} from 'src/api';
+  webAuthnRegister,
+} from "src/api";
 
 function getKnownCredentials(): ArrayBuffer[] {
   let raw = [];
   try {
     raw =
-      (JSON.parse(localStorage.getItem('known-credentials')) as string[]) || [];
+      (JSON.parse(localStorage.getItem("known-credentials")) as string[]) || [];
   } catch (e) {}
   return raw.map((v) => decode(v));
 }
@@ -30,12 +29,12 @@ function addKnownCredential(rawID: ArrayBuffer) {
   let raw = [];
   try {
     raw =
-      (JSON.parse(localStorage.getItem('known-credentials')) as string[]) || [];
+      (JSON.parse(localStorage.getItem("known-credentials")) as string[]) || [];
   } catch (e) {}
   const set = new Set<string>(raw);
   set.add(encodeUrl(rawID));
   localStorage.setItem(
-    'known-credentials',
+    "known-credentials",
     JSON.stringify(Array.from(set.values()))
   );
 }
@@ -44,15 +43,15 @@ async function authenticate(username: string) {
   const challenge = crypto.getRandomValues(new Uint8Array(32));
   const options: PublicKeyCredentialRequestOptions = {
     allowCredentials: getKnownCredentials().map((rawID) => ({
-      type: 'public-key',
-      id: rawID
+      type: "public-key",
+      id: rawID,
     })),
     challenge: challenge,
     rpId: location.hostname,
-    userVerification: 'preferred'
+    userVerification: "preferred",
   };
   const credential = (await navigator.credentials.get({
-    publicKey: options
+    publicKey: options,
   })) as PublicKeyCredential;
   const credentialResponse =
     credential.response as AuthenticatorAssertionResponse;
@@ -69,9 +68,9 @@ async function authenticate(username: string) {
         userHandle: encodeUrl(
           credentialResponse.userHandle ||
             Uint8Array.from(username, (c) => c.charCodeAt(0))
-        )
-      }
-    }
+        ),
+      },
+    },
   });
 }
 
@@ -85,27 +84,27 @@ async function register(
     attestation: attestationType || undefined,
     authenticatorSelection: {
       authenticatorAttachment: authenticatorAttachment || undefined,
-      residentKey: 'preferred',
-      userVerification: 'preferred'
+      residentKey: "preferred",
+      userVerification: "preferred",
     },
     challenge: challenge,
     pubKeyCredParams: [
-      { alg: -65535, type: 'public-key' },
-      { alg: -257, type: 'public-key' },
-      { alg: -7, type: 'public-key' }
+      { alg: -65535, type: "public-key" },
+      { alg: -257, type: "public-key" },
+      { alg: -7, type: "public-key" },
     ],
     rp: {
       id: location.hostname,
-      name: 'Pomerium'
+      name: "Pomerium",
     },
     user: {
       id: Uint8Array.from(username, (c) => c.charCodeAt(0)),
       name: username,
-      displayName: username
-    }
+      displayName: username,
+    },
   };
   const credential = (await navigator.credentials.create({
-    publicKey: options
+    publicKey: options,
   })) as PublicKeyCredential;
   const credentialResponse =
     credential.response as AuthenticatorAttestationResponse;
@@ -118,9 +117,9 @@ async function register(
       rawId: encodeUrl(credential.rawId),
       response: {
         attestationObject: encodeUrl(credentialResponse.attestationObject),
-        clientDataJSON: encodeUrl(credentialResponse.clientDataJSON)
-      }
-    }
+        clientDataJSON: encodeUrl(credentialResponse.clientDataJSON),
+      },
+    },
   });
 }
 
@@ -145,7 +144,7 @@ const WebAuthn: FC = ({}) => {
     evt: SelectChangeEvent<AttestationConveyancePreference>
   ) {
     setAttestationType(
-      evt.target.value === 'none'
+      evt.target.value === "none"
         ? null
         : (evt.target.value as AttestationConveyancePreference)
     );
@@ -154,7 +153,7 @@ const WebAuthn: FC = ({}) => {
     evt: SelectChangeEvent<AuthenticatorAttachment>
   ) {
     setAuthenticatorAttachment(
-      evt.target.value === 'unspecified'
+      evt.target.value === "unspecified"
         ? null
         : (evt.target.value as AuthenticatorAttachment)
     );
@@ -167,11 +166,11 @@ const WebAuthn: FC = ({}) => {
       try {
         await authenticate(username);
         setResult({
-          severity: 'success',
-          message: `Authentication Successful!`
+          severity: "success",
+          message: `Authentication Successful!`,
         });
       } catch (e) {
-        setResult({ severity: 'error', message: `${e}` });
+        setResult({ severity: "error", message: `${e}` });
       }
     })();
   }
@@ -183,11 +182,11 @@ const WebAuthn: FC = ({}) => {
       try {
         await register(username, attestationType, authenticatorAttachment);
         setResult({
-          severity: 'success',
-          message: `Registration Successful! Now try Login.`
+          severity: "success",
+          message: `Registration Successful! Now try Login.`,
         });
       } catch (e) {
-        setResult({ severity: 'error', message: `${e}` });
+        setResult({ severity: "error", message: `${e}` });
       }
     })();
   }
@@ -218,7 +217,7 @@ const WebAuthn: FC = ({}) => {
                       fullWidth
                       label="Username"
                       onChange={onChangeUsername}
-                      value={username || ''}
+                      value={username || ""}
                       variant="outlined"
                     />
                   </Grid>
@@ -228,7 +227,7 @@ const WebAuthn: FC = ({}) => {
                       <Select
                         label="Attestation Type"
                         onChange={onChangeAttestationType}
-                        value={attestationType || 'none'}
+                        value={attestationType || "none"}
                       >
                         <MenuItem value="none">None</MenuItem>
                         <MenuItem value="indirect">Indirect</MenuItem>
@@ -242,7 +241,7 @@ const WebAuthn: FC = ({}) => {
                       <Select
                         label="Authenticator Type"
                         onChange={onChangeAuthenticatorType}
-                        value={authenticatorAttachment || 'unspecified'}
+                        value={authenticatorAttachment || "unspecified"}
                       >
                         <MenuItem value="unspecified">Unspecified</MenuItem>
                         <MenuItem value="cross-platform">
