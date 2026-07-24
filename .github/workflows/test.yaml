@@ -25,6 +25,7 @@ jobs:
         with:
           node-version-file: .tool-versions
 
+      # also typechecks the ui, since vite build does not
       - name: build ui
         run: make build-ui
 

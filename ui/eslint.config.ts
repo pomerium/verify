@@ -9,7 +9,7 @@ export default defineConfig(
 
   // JS/TS files
   {
-    files: ["src/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
+    files: ["src/**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
     languageOptions: {
       globals: {
         ...globals.browser,

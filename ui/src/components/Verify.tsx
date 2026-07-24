@@ -1,5 +1,5 @@
 import LogoutIcon from "@mui/icons-material/Logout";
-import React, { type FC, useEffect, useState } from "react";
+import { type FC, useEffect, useState } from "react";
 
 import { type VerifyInfo, fetchVerifyInfo } from "../api";
 import VerifyHeaders from "./VerifyHeaders";

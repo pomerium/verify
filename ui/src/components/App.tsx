@@ -1,6 +1,6 @@
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import createTheme from "@mui/material/styles/createTheme";
-import React, { type FC } from "react";
+import { type FC } from "react";
 
 import Verify from "./Verify";
 import WebAuthn from "./WebAuthn";

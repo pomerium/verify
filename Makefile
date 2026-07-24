@@ -41,6 +41,15 @@ cover: ## Runs go test with coverage
 	@go test -race -coverprofile=coverage.txt ./...
 
 .PHONY: lint
-lint:
+lint: lint-go lint-ui
+
+.PHONY: lint-go
+lint-go:
 	@echo "@==> $@"
 	golangci-lint run --fix ./...
+
+# Lint frontend javascript
+.PHONY: lint-ui
+lint-ui: npm-install
+	@echo "==> $@"
+	cd ui; npm run lint
