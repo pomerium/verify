@@ -1,36 +1,46 @@
 import { decode, encodeUrl } from "@borderless/base64";
-import Alert, { AlertColor } from "@mui/material/Alert";
+import Alert, { type AlertColor } from "@mui/material/Alert";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import FormControl from "@mui/material/FormControl";
 import Grid from "@mui/material/Grid";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
+import Select, { type SelectChangeEvent } from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
-import React, { FC, useState } from "react";
+import React, { type FC, useState } from "react";
+
 import {
   toWebAuthnAuthenticateOptions,
   toWebAuthnRegisterOptions,
   webAuthnAuthenticate,
   webAuthnRegister,
-} from "src/api";
+} from "../api";
 
-function getKnownCredentials(): ArrayBuffer[] {
-  let raw = [];
+function getKnownCredentials(): Uint8Array<ArrayBuffer>[] {
+  let raw: string[] = [];
   try {
     raw =
-      (JSON.parse(localStorage.getItem("known-credentials")) as string[]) || [];
-  } catch (e) {}
-  return raw.map((v) => decode(v));
+      (JSON.parse(
+        localStorage.getItem("known-credentials") ?? "[]"
+      ) as string[]) || [];
+  } catch {
+    // ignore malformed storage and start from an empty list
+  }
+  // decode always allocates a fresh, non-shared buffer
+  return raw.map((v) => decode(v) as Uint8Array<ArrayBuffer>);
 }
 
 function addKnownCredential(rawID: ArrayBuffer) {
-  let raw = [];
+  let raw: string[] = [];
   try {
     raw =
-      (JSON.parse(localStorage.getItem("known-credentials")) as string[]) || [];
-  } catch (e) {}
+      (JSON.parse(
+        localStorage.getItem("known-credentials") ?? "[]"
+      ) as string[]) || [];
+  } catch {
+    // ignore malformed storage and start from an empty list
+  }
   const set = new Set<string>(raw);
   set.add(encodeUrl(rawID));
   localStorage.setItem(
@@ -76,8 +86,8 @@ async function authenticate(username: string) {
 
 async function register(
   username: string,
-  attestationType: AttestationConveyancePreference,
-  authenticatorAttachment: AuthenticatorAttachment
+  attestationType?: AttestationConveyancePreference,
+  authenticatorAttachment?: AuthenticatorAttachment
 ) {
   const challenge = crypto.getRandomValues(new Uint8Array(32));
   const options: PublicKeyCredentialCreationOptions = {
@@ -128,13 +138,13 @@ type ActionResult = {
   message: string;
 };
 
-const WebAuthn: FC = ({}) => {
-  const [username, setUsername] = useState<string>(null);
+const WebAuthn: FC = () => {
+  const [username, setUsername] = useState("");
   const [attestationType, setAttestationType] =
-    useState<AttestationConveyancePreference>(null);
+    useState<AttestationConveyancePreference>();
   const [authenticatorAttachment, setAuthenticatorAttachment] =
-    useState<AuthenticatorAttachment>(null);
-  const [result, setResult] = useState<ActionResult>(null);
+    useState<AuthenticatorAttachment>();
+  const [result, setResult] = useState<ActionResult>();
   const knownCredentials = getKnownCredentials();
 
   function onChangeUsername(evt: React.ChangeEvent<HTMLInputElement>) {
@@ -145,16 +155,16 @@ const WebAuthn: FC = ({}) => {
   ) {
     setAttestationType(
       evt.target.value === "none"
-        ? null
+        ? undefined
         : (evt.target.value as AttestationConveyancePreference)
     );
   }
   function onChangeAuthenticatorType(
-    evt: SelectChangeEvent<AuthenticatorAttachment>
+    evt: SelectChangeEvent<AuthenticatorAttachment | "unspecified">
   ) {
     setAuthenticatorAttachment(
       evt.target.value === "unspecified"
-        ? null
+        ? undefined
         : (evt.target.value as AuthenticatorAttachment)
     );
   }
@@ -162,7 +172,7 @@ const WebAuthn: FC = ({}) => {
     evt.preventDefault();
 
     (async () => {
-      setResult(null);
+      setResult(undefined);
       try {
         await authenticate(username);
         setResult({
@@ -178,7 +188,7 @@ const WebAuthn: FC = ({}) => {
     evt.preventDefault();
 
     (async () => {
-      setResult(null);
+      setResult(undefined);
       try {
         await register(username, attestationType, authenticatorAttachment);
         setResult({
@@ -217,7 +227,7 @@ const WebAuthn: FC = ({}) => {
                       fullWidth
                       label="Username"
                       onChange={onChangeUsername}
-                      value={username || ""}
+                      value={username}
                       variant="outlined"
                     />
                   </Grid>

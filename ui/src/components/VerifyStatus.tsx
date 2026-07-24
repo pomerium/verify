@@ -1,8 +1,9 @@
-import React, { FC } from "react";
-import { VerifyInfo } from "src/api";
+import React, { type FC } from "react";
+
+import { type VerifyInfo } from "../api";
 
 type Props = {
-  info: VerifyInfo;
+  info?: VerifyInfo;
 };
 const VerifyStatus: FC<Props> = ({ info }) => {
   return (

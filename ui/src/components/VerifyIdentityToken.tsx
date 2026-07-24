@@ -1,10 +1,9 @@
-import isString from "lodash/isString";
-import uniq from "lodash/uniq";
-import React, { FC } from "react";
+import { isString, uniq } from "lodash-es";
+import React, { type FC } from "react";
 
-import { VerifyInfo } from "../api";
+import { type VerifyInfo } from "../api";
 
-const makeUnique = (entries: string | string[]): string[] => {
+const makeUnique = (entries?: string | string[]): string[] => {
   if (!entries) {
     return [];
   }
@@ -15,7 +14,7 @@ const makeUnique = (entries: string | string[]): string[] => {
 };
 
 type Props = {
-  info: VerifyInfo;
+  info?: VerifyInfo;
 };
 const VerifyIdentityToken: FC<Props> = ({ info }) => {
   return (

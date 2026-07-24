@@ -57,7 +57,7 @@ export type WebAuthnAuthenticateOptions = {
 export function toWebAuthnAuthenticateOptions(
   options: PublicKeyCredentialRequestOptions
 ): WebAuthnAuthenticateOptions {
-  let obj: WebAuthnAuthenticateOptions = {
+  const obj: WebAuthnAuthenticateOptions = {
     challenge: encodeUrl(
       ArrayBuffer.isView(options.challenge)
         ? options.challenge.buffer
@@ -65,13 +65,15 @@ export function toWebAuthnAuthenticateOptions(
     ),
   };
   if ("allowCredentials" in options) {
-    obj.allowCredentials = options.allowCredentials.map((c) => ({
+    obj.allowCredentials = options.allowCredentials?.map((c) => ({
       id: encodeUrl(ArrayBuffer.isView(c.id) ? c.id.buffer : c.id),
       type: c.type,
     }));
   }
   if ("extensions" in options) {
-    obj.extensions = Object.fromEntries(Object.entries(options.extensions));
+    obj.extensions = Object.fromEntries(
+      Object.entries(options.extensions ?? {})
+    );
   }
   if ("rpId" in options) {
     obj.rpId = options.rpId;
@@ -129,7 +131,7 @@ export type WebAuthnRegisterOptions = {
   extensions?: Record<string, unknown>;
   pubKeyCredParams: PublicKeyCredentialParameters[];
   rp: {
-    id: string;
+    id?: string;
     name: string;
   };
   timeout?: number;
@@ -143,7 +145,7 @@ export type WebAuthnRegisterOptions = {
 export function toWebAuthnRegisterOptions(
   options: PublicKeyCredentialCreationOptions
 ): WebAuthnRegisterOptions {
-  let obj: WebAuthnRegisterOptions = {
+  const obj: WebAuthnRegisterOptions = {
     challenge: encodeUrl(
       ArrayBuffer.isView(options.challenge)
         ? options.challenge.buffer
@@ -168,26 +170,24 @@ export function toWebAuthnRegisterOptions(
     obj.attestation = options.attestation;
   }
   if ("authenticatorSelection" in options) {
-    obj.authenticatorSelection = {};
-    [
-      "authenticatorAttachment",
-      "requireResidentKey",
-      "residentKey",
-      "userVerification",
-    ].forEach((k) => {
-      if (k in options.authenticatorSelection) {
-        obj.authenticatorSelection[k] = options.authenticatorSelection[k];
-      }
-    });
+    const selection = options.authenticatorSelection;
+    obj.authenticatorSelection = {
+      authenticatorAttachment: selection?.authenticatorAttachment,
+      requireResidentKey: selection?.requireResidentKey,
+      residentKey: selection?.residentKey,
+      userVerification: selection?.userVerification,
+    };
   }
   if ("excludeCredentials" in options) {
-    obj.excludeCredentials = options.excludeCredentials.map((c) => ({
+    obj.excludeCredentials = options.excludeCredentials?.map((c) => ({
       id: encodeUrl(ArrayBuffer.isView(c.id) ? c.id.buffer : c.id),
       type: c.type,
     }));
   }
   if ("extensions" in options) {
-    obj.extensions = Object.fromEntries(Object.entries(options.extensions));
+    obj.extensions = Object.fromEntries(
+      Object.entries(options.extensions ?? {})
+    );
   }
   if ("timeout" in options) {
     obj.timeout = options.timeout;

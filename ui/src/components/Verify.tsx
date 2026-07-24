@@ -1,14 +1,14 @@
 import LogoutIcon from "@mui/icons-material/Logout";
-import React, { FC, useEffect, useState } from "react";
+import React, { type FC, useEffect, useState } from "react";
 
-import { VerifyInfo, fetchVerifyInfo } from "../api";
+import { type VerifyInfo, fetchVerifyInfo } from "../api";
 import VerifyHeaders from "./VerifyHeaders";
 import VerifyIdentityToken from "./VerifyIdentityToken";
 import VerifyRequestDetails from "./VerifyRequestDetails";
 import VerifyStatus from "./VerifyStatus";
 
 const Verify: FC = () => {
-  const [info, setInfo] = useState<VerifyInfo>(null);
+  const [info, setInfo] = useState<VerifyInfo>();
 
   useEffect(() => {
     (async () => {
