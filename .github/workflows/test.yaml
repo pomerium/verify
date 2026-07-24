@@ -20,6 +20,14 @@ jobs:
         with:
           go-version-file: .tool-versions
 
+      - name: Setup Node
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version-file: .tool-versions
+
+      - name: build ui
+        run: make build-ui
+
       - name: test
         run: make cover
 

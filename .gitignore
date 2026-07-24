@@ -1,6 +1,6 @@
 bin/
 coverage.txt
-ui/dist/index.js
+ui/dist/
 node_modules/
 .idea/
 .vscode/
