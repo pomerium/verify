@@ -78,8 +78,8 @@ update-tools() {
 	asdf set golang latest:1.26
 	asdf install golangci-lint latest:2
 	asdf set golangci-lint latest:2
-	asdf install nodejs latest:22
-	asdf set nodejs latest:22
+	asdf install nodejs latest:26
+	asdf set nodejs latest:26
 
 	popd
 }

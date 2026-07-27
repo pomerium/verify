@@ -1,9 +1,9 @@
-import React, { FC } from 'react';
+import { type FC } from "react";
 
-import { VerifyInfo } from '../api';
+import { type VerifyInfo } from "../api";
 
 type Props = {
-  info: VerifyInfo;
+  info?: VerifyInfo;
 };
 const VerifyRequestDetails: FC<Props> = ({ info }) => {
   const request = Object.entries(info?.request || {});
@@ -31,7 +31,7 @@ const VerifyRequestDetails: FC<Props> = ({ info }) => {
           </table>
         </div>
         <div className="category-link">
-          A complete dump of the values on this page can be found at the{' '}
+          A complete dump of the values on this page can be found at the{" "}
           <a href="/json">/json</a> endpoint.
         </div>
       </div>

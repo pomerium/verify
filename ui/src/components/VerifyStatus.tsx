@@ -1,9 +1,9 @@
-import React, { FC } from 'react';
+import { type FC } from "react";
 
-import { VerifyInfo } from 'src/api';
+import { type VerifyInfo } from "../api";
 
 type Props = {
-  info: VerifyInfo;
+  info?: VerifyInfo;
 };
 const VerifyStatus: FC<Props> = ({ info }) => {
   return (
@@ -17,7 +17,7 @@ const VerifyStatus: FC<Props> = ({ info }) => {
               <label className="status-time">
                 <span>
                   We tried to verify the incoming user, but failed with the
-                  following error:{' '}
+                  following error:{" "}
                 </span>
                 <code>{info?.error}</code>
               </label>
@@ -30,7 +30,7 @@ const VerifyStatus: FC<Props> = ({ info }) => {
               <span className="title">TLS Certificate verification failed</span>
               <label className="status-time">
                 <span>
-                  TLS certificate verification failed when verifying the JWT:{' '}
+                  TLS certificate verification failed when verifying the JWT:{" "}
                   {info?.request?.tlsError}
                 </span>
               </label>

@@ -1,9 +1,9 @@
-import React, { FC } from 'react';
+import { type FC } from "react";
 
-import { VerifyInfo } from '../api';
+import { type VerifyInfo } from "../api";
 
 type Props = {
-  info: VerifyInfo;
+  info?: VerifyInfo;
 };
 const VerifyHeaders: FC<Props> = ({ info }) => {
   const headers = Object.entries(info?.headers || {}) || [];
@@ -13,8 +13,8 @@ const VerifyHeaders: FC<Props> = ({ info }) => {
       <div className="messages">
         <div className="box-inner">
           <div className="category-header clearfix">
-            <span className="category-title">Unsigned Identity Headers
-              (<code>X-Pomerium-Claim-*</code>)
+            <span className="category-title">
+              Unsigned Identity Headers (<code>X-Pomerium-Claim-*</code>)
             </span>
             <a href="/headers">
               <span className="json-icon"></span>
@@ -29,7 +29,7 @@ const VerifyHeaders: FC<Props> = ({ info }) => {
                 </tr>
               </thead>
               <tbody>
-                {headers?.map(([k, vs]) =>
+                {headers?.map(([k, vs]) => (
                   <tr key={k}>
                     <td>{k}</td>
                     <td>
@@ -38,7 +38,7 @@ const VerifyHeaders: FC<Props> = ({ info }) => {
                       ))}
                     </td>
                   </tr>
-                )}
+                ))}
               </tbody>
             </table>
           ) : (
@@ -46,12 +46,12 @@ const VerifyHeaders: FC<Props> = ({ info }) => {
           )}
         </div>
         <div className="category-link">
-          Pomerium allows{' '}
+          Pomerium allows{" "}
           <a href="https://www.pomerium.com/docs/reference/jwt-claim-headers">
-            passing identity{' '}
-          </a>{' '}
-          to upstream applications as HTTP request headers. Note, unlike{' '}
-          <code>X-Pomerium-Jwt-Assertion</code> these headers are{' '}
+            passing identity{" "}
+          </a>{" "}
+          to upstream applications as HTTP request headers. Note, unlike{" "}
+          <code>X-Pomerium-Jwt-Assertion</code> these headers are{" "}
           <strong>not signed</strong>.
         </div>
       </div>

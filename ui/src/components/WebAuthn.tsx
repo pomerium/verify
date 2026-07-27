@@ -1,41 +1,50 @@
-import { decode, encodeUrl } from '@borderless/base64';
-import Alert, { AlertColor } from '@mui/material/Alert';
-import Button from '@mui/material/Button';
-import Container from '@mui/material/Container';
-import FormControl from '@mui/material/FormControl';
-import Grid from '@mui/material/Grid';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import TextField from '@mui/material/TextField';
-import React, { FC, useState } from 'react';
+import { decode, encodeUrl } from "@borderless/base64";
+import Alert, { type AlertColor } from "@mui/material/Alert";
+import Button from "@mui/material/Button";
+import Container from "@mui/material/Container";
+import FormControl from "@mui/material/FormControl";
+import Grid from "@mui/material/Grid";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Select, { type SelectChangeEvent } from "@mui/material/Select";
+import TextField from "@mui/material/TextField";
+import React, { type FC, useState } from "react";
 
 import {
   toWebAuthnAuthenticateOptions,
   toWebAuthnRegisterOptions,
   webAuthnAuthenticate,
-  webAuthnRegister
-} from 'src/api';
+  webAuthnRegister,
+} from "../api";
 
-function getKnownCredentials(): ArrayBuffer[] {
-  let raw = [];
+function getKnownCredentials(): Uint8Array<ArrayBuffer>[] {
+  let raw: string[] = [];
   try {
     raw =
-      (JSON.parse(localStorage.getItem('known-credentials')) as string[]) || [];
-  } catch (e) {}
-  return raw.map((v) => decode(v));
+      (JSON.parse(
+        localStorage.getItem("known-credentials") ?? "[]"
+      ) as string[]) || [];
+  } catch {
+    // ignore malformed storage and start from an empty list
+  }
+  // decode always allocates a fresh, non-shared buffer
+  return raw.map((v) => decode(v) as Uint8Array<ArrayBuffer>);
 }
 
 function addKnownCredential(rawID: ArrayBuffer) {
-  let raw = [];
+  let raw: string[] = [];
   try {
     raw =
-      (JSON.parse(localStorage.getItem('known-credentials')) as string[]) || [];
-  } catch (e) {}
+      (JSON.parse(
+        localStorage.getItem("known-credentials") ?? "[]"
+      ) as string[]) || [];
+  } catch {
+    // ignore malformed storage and start from an empty list
+  }
   const set = new Set<string>(raw);
   set.add(encodeUrl(rawID));
   localStorage.setItem(
-    'known-credentials',
+    "known-credentials",
     JSON.stringify(Array.from(set.values()))
   );
 }
@@ -44,15 +53,15 @@ async function authenticate(username: string) {
   const challenge = crypto.getRandomValues(new Uint8Array(32));
   const options: PublicKeyCredentialRequestOptions = {
     allowCredentials: getKnownCredentials().map((rawID) => ({
-      type: 'public-key',
-      id: rawID
+      type: "public-key",
+      id: rawID,
     })),
     challenge: challenge,
     rpId: location.hostname,
-    userVerification: 'preferred'
+    userVerification: "preferred",
   };
   const credential = (await navigator.credentials.get({
-    publicKey: options
+    publicKey: options,
   })) as PublicKeyCredential;
   const credentialResponse =
     credential.response as AuthenticatorAssertionResponse;
@@ -69,43 +78,43 @@ async function authenticate(username: string) {
         userHandle: encodeUrl(
           credentialResponse.userHandle ||
             Uint8Array.from(username, (c) => c.charCodeAt(0))
-        )
-      }
-    }
+        ),
+      },
+    },
   });
 }
 
 async function register(
   username: string,
-  attestationType: AttestationConveyancePreference,
-  authenticatorAttachment: AuthenticatorAttachment
+  attestationType?: AttestationConveyancePreference,
+  authenticatorAttachment?: AuthenticatorAttachment
 ) {
   const challenge = crypto.getRandomValues(new Uint8Array(32));
   const options: PublicKeyCredentialCreationOptions = {
     attestation: attestationType || undefined,
     authenticatorSelection: {
       authenticatorAttachment: authenticatorAttachment || undefined,
-      residentKey: 'preferred',
-      userVerification: 'preferred'
+      residentKey: "preferred",
+      userVerification: "preferred",
     },
     challenge: challenge,
     pubKeyCredParams: [
-      { alg: -65535, type: 'public-key' },
-      { alg: -257, type: 'public-key' },
-      { alg: -7, type: 'public-key' }
+      { alg: -65535, type: "public-key" },
+      { alg: -257, type: "public-key" },
+      { alg: -7, type: "public-key" },
     ],
     rp: {
       id: location.hostname,
-      name: 'Pomerium'
+      name: "Pomerium",
     },
     user: {
       id: Uint8Array.from(username, (c) => c.charCodeAt(0)),
       name: username,
-      displayName: username
-    }
+      displayName: username,
+    },
   };
   const credential = (await navigator.credentials.create({
-    publicKey: options
+    publicKey: options,
   })) as PublicKeyCredential;
   const credentialResponse =
     credential.response as AuthenticatorAttestationResponse;
@@ -118,9 +127,9 @@ async function register(
       rawId: encodeUrl(credential.rawId),
       response: {
         attestationObject: encodeUrl(credentialResponse.attestationObject),
-        clientDataJSON: encodeUrl(credentialResponse.clientDataJSON)
-      }
-    }
+        clientDataJSON: encodeUrl(credentialResponse.clientDataJSON),
+      },
+    },
   });
 }
 
@@ -129,13 +138,13 @@ type ActionResult = {
   message: string;
 };
 
-const WebAuthn: FC = ({}) => {
-  const [username, setUsername] = useState<string>(null);
+const WebAuthn: FC = () => {
+  const [username, setUsername] = useState("");
   const [attestationType, setAttestationType] =
-    useState<AttestationConveyancePreference>(null);
+    useState<AttestationConveyancePreference>();
   const [authenticatorAttachment, setAuthenticatorAttachment] =
-    useState<AuthenticatorAttachment>(null);
-  const [result, setResult] = useState<ActionResult>(null);
+    useState<AuthenticatorAttachment>();
+  const [result, setResult] = useState<ActionResult>();
   const knownCredentials = getKnownCredentials();
 
   function onChangeUsername(evt: React.ChangeEvent<HTMLInputElement>) {
@@ -145,17 +154,17 @@ const WebAuthn: FC = ({}) => {
     evt: SelectChangeEvent<AttestationConveyancePreference>
   ) {
     setAttestationType(
-      evt.target.value === 'none'
-        ? null
+      evt.target.value === "none"
+        ? undefined
         : (evt.target.value as AttestationConveyancePreference)
     );
   }
   function onChangeAuthenticatorType(
-    evt: SelectChangeEvent<AuthenticatorAttachment>
+    evt: SelectChangeEvent<AuthenticatorAttachment | "unspecified">
   ) {
     setAuthenticatorAttachment(
-      evt.target.value === 'unspecified'
-        ? null
+      evt.target.value === "unspecified"
+        ? undefined
         : (evt.target.value as AuthenticatorAttachment)
     );
   }
@@ -163,15 +172,15 @@ const WebAuthn: FC = ({}) => {
     evt.preventDefault();
 
     (async () => {
-      setResult(null);
+      setResult(undefined);
       try {
         await authenticate(username);
         setResult({
-          severity: 'success',
-          message: `Authentication Successful!`
+          severity: "success",
+          message: `Authentication Successful!`,
         });
       } catch (e) {
-        setResult({ severity: 'error', message: `${e}` });
+        setResult({ severity: "error", message: `${e}` });
       }
     })();
   }
@@ -179,15 +188,15 @@ const WebAuthn: FC = ({}) => {
     evt.preventDefault();
 
     (async () => {
-      setResult(null);
+      setResult(undefined);
       try {
         await register(username, attestationType, authenticatorAttachment);
         setResult({
-          severity: 'success',
-          message: `Registration Successful! Now try Login.`
+          severity: "success",
+          message: `Registration Successful! Now try Login.`,
         });
       } catch (e) {
-        setResult({ severity: 'error', message: `${e}` });
+        setResult({ severity: "error", message: `${e}` });
       }
     })();
   }
@@ -218,7 +227,7 @@ const WebAuthn: FC = ({}) => {
                       fullWidth
                       label="Username"
                       onChange={onChangeUsername}
-                      value={username || ''}
+                      value={username}
                       variant="outlined"
                     />
                   </Grid>
@@ -228,7 +237,7 @@ const WebAuthn: FC = ({}) => {
                       <Select
                         label="Attestation Type"
                         onChange={onChangeAttestationType}
-                        value={attestationType || 'none'}
+                        value={attestationType || "none"}
                       >
                         <MenuItem value="none">None</MenuItem>
                         <MenuItem value="indirect">Indirect</MenuItem>
@@ -242,7 +251,7 @@ const WebAuthn: FC = ({}) => {
                       <Select
                         label="Authenticator Type"
                         onChange={onChangeAuthenticatorType}
-                        value={authenticatorAttachment || 'unspecified'}
+                        value={authenticatorAttachment || "unspecified"}
                       >
                         <MenuItem value="unspecified">Unspecified</MenuItem>
                         <MenuItem value="cross-platform">
