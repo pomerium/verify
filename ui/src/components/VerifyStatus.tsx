@@ -16,8 +16,7 @@ const VerifyStatus: FC<Props> = ({ info }) => {
               <span className="title">Identity verification failed</span>
               <label className="status-time">
                 <span>
-                  We tried to verify the incoming user, but failed with the
-                  following error:{" "}
+                  We tried to verify the incoming user, but failed with the following error:{" "}
                 </span>
                 <code>{info?.error}</code>
               </label>
@@ -42,10 +41,7 @@ const VerifyStatus: FC<Props> = ({ info }) => {
             <div className="title-wrapper">
               <span className="title">Identity found and verified 🚀</span>
               <label className="status-time">
-                <span>
-                  This app is properly configured and is being secured by
-                  Pomerium.
-                </span>
+                <span>This app is properly configured and is being secured by Pomerium.</span>
               </label>
             </div>
           </>

@@ -20,10 +20,7 @@ import {
 function getKnownCredentials(): Uint8Array<ArrayBuffer>[] {
   let raw: string[] = [];
   try {
-    raw =
-      (JSON.parse(
-        localStorage.getItem("known-credentials") ?? "[]"
-      ) as string[]) || [];
+    raw = (JSON.parse(localStorage.getItem("known-credentials") ?? "[]") as string[]) || [];
   } catch {
     // ignore malformed storage and start from an empty list
   }
@@ -34,19 +31,13 @@ function getKnownCredentials(): Uint8Array<ArrayBuffer>[] {
 function addKnownCredential(rawID: ArrayBuffer) {
   let raw: string[] = [];
   try {
-    raw =
-      (JSON.parse(
-        localStorage.getItem("known-credentials") ?? "[]"
-      ) as string[]) || [];
+    raw = (JSON.parse(localStorage.getItem("known-credentials") ?? "[]") as string[]) || [];
   } catch {
     // ignore malformed storage and start from an empty list
   }
   const set = new Set<string>(raw);
   set.add(encodeUrl(rawID));
-  localStorage.setItem(
-    "known-credentials",
-    JSON.stringify(Array.from(set.values()))
-  );
+  localStorage.setItem("known-credentials", JSON.stringify(Array.from(set.values())));
 }
 
 async function authenticate(username: string) {
@@ -63,8 +54,7 @@ async function authenticate(username: string) {
   const credential = (await navigator.credentials.get({
     publicKey: options,
   })) as PublicKeyCredential;
-  const credentialResponse =
-    credential.response as AuthenticatorAssertionResponse;
+  const credentialResponse = credential.response as AuthenticatorAssertionResponse;
   await webAuthnAuthenticate({
     options: toWebAuthnAuthenticateOptions(options),
     credential: {
@@ -76,8 +66,7 @@ async function authenticate(username: string) {
         clientDataJSON: encodeUrl(credentialResponse.clientDataJSON),
         signature: encodeUrl(credentialResponse.signature),
         userHandle: encodeUrl(
-          credentialResponse.userHandle ||
-            Uint8Array.from(username, (c) => c.charCodeAt(0))
+          credentialResponse.userHandle || Uint8Array.from(username, (c) => c.charCodeAt(0)),
         ),
       },
     },
@@ -87,7 +76,7 @@ async function authenticate(username: string) {
 async function register(
   username: string,
   attestationType?: AttestationConveyancePreference,
-  authenticatorAttachment?: AuthenticatorAttachment
+  authenticatorAttachment?: AuthenticatorAttachment,
 ) {
   const challenge = crypto.getRandomValues(new Uint8Array(32));
   const options: PublicKeyCredentialCreationOptions = {
@@ -116,8 +105,7 @@ async function register(
   const credential = (await navigator.credentials.create({
     publicKey: options,
   })) as PublicKeyCredential;
-  const credentialResponse =
-    credential.response as AuthenticatorAttestationResponse;
+  const credentialResponse = credential.response as AuthenticatorAttestationResponse;
   addKnownCredential(credential.rawId);
   await webAuthnRegister({
     options: toWebAuthnRegisterOptions(options),
@@ -140,32 +128,28 @@ type ActionResult = {
 
 const WebAuthn: FC = () => {
   const [username, setUsername] = useState("");
-  const [attestationType, setAttestationType] =
-    useState<AttestationConveyancePreference>();
-  const [authenticatorAttachment, setAuthenticatorAttachment] =
-    useState<AuthenticatorAttachment>();
+  const [attestationType, setAttestationType] = useState<AttestationConveyancePreference>();
+  const [authenticatorAttachment, setAuthenticatorAttachment] = useState<AuthenticatorAttachment>();
   const [result, setResult] = useState<ActionResult>();
   const knownCredentials = getKnownCredentials();
 
   function onChangeUsername(evt: React.ChangeEvent<HTMLInputElement>) {
     setUsername(evt.target.value);
   }
-  function onChangeAttestationType(
-    evt: SelectChangeEvent<AttestationConveyancePreference>
-  ) {
+  function onChangeAttestationType(evt: SelectChangeEvent<AttestationConveyancePreference>) {
     setAttestationType(
       evt.target.value === "none"
         ? undefined
-        : (evt.target.value as AttestationConveyancePreference)
+        : (evt.target.value as AttestationConveyancePreference),
     );
   }
   function onChangeAuthenticatorType(
-    evt: SelectChangeEvent<AuthenticatorAttachment | "unspecified">
+    evt: SelectChangeEvent<AuthenticatorAttachment | "unspecified">,
   ) {
     setAuthenticatorAttachment(
       evt.target.value === "unspecified"
         ? undefined
-        : (evt.target.value as AuthenticatorAttachment)
+        : (evt.target.value as AuthenticatorAttachment),
     );
   }
   function onClickLogin(evt: React.MouseEvent<HTMLButtonElement>) {
@@ -254,9 +238,7 @@ const WebAuthn: FC = () => {
                         value={authenticatorAttachment || "unspecified"}
                       >
                         <MenuItem value="unspecified">Unspecified</MenuItem>
-                        <MenuItem value="cross-platform">
-                          Cross-Platform
-                        </MenuItem>
+                        <MenuItem value="cross-platform">Cross-Platform</MenuItem>
                         <MenuItem value="platform">Platform (TPM)</MenuItem>
                       </Select>
                     </FormControl>

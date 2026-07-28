@@ -55,13 +55,11 @@ export type WebAuthnAuthenticateOptions = {
 };
 
 export function toWebAuthnAuthenticateOptions(
-  options: PublicKeyCredentialRequestOptions
+  options: PublicKeyCredentialRequestOptions,
 ): WebAuthnAuthenticateOptions {
   const obj: WebAuthnAuthenticateOptions = {
     challenge: encodeUrl(
-      ArrayBuffer.isView(options.challenge)
-        ? options.challenge.buffer
-        : options.challenge
+      ArrayBuffer.isView(options.challenge) ? options.challenge.buffer : options.challenge,
     ),
   };
   if ("allowCredentials" in options) {
@@ -71,9 +69,7 @@ export function toWebAuthnAuthenticateOptions(
     }));
   }
   if ("extensions" in options) {
-    obj.extensions = Object.fromEntries(
-      Object.entries(options.extensions ?? {})
-    );
+    obj.extensions = Object.fromEntries(Object.entries(options.extensions ?? {}));
   }
   if ("rpId" in options) {
     obj.rpId = options.rpId;
@@ -102,9 +98,7 @@ export type WebAuthnAuthenticateRequest = {
   };
 };
 
-export async function webAuthnAuthenticate(
-  request: WebAuthnAuthenticateRequest
-) {
+export async function webAuthnAuthenticate(request: WebAuthnAuthenticateRequest) {
   const response = await fetch("/api/webauthn-authenticate", {
     method: "POST",
     headers: {
@@ -143,13 +137,11 @@ export type WebAuthnRegisterOptions = {
 };
 
 export function toWebAuthnRegisterOptions(
-  options: PublicKeyCredentialCreationOptions
+  options: PublicKeyCredentialCreationOptions,
 ): WebAuthnRegisterOptions {
   const obj: WebAuthnRegisterOptions = {
     challenge: encodeUrl(
-      ArrayBuffer.isView(options.challenge)
-        ? options.challenge.buffer
-        : options.challenge
+      ArrayBuffer.isView(options.challenge) ? options.challenge.buffer : options.challenge,
     ),
     pubKeyCredParams: options.pubKeyCredParams,
     rp: {
@@ -157,11 +149,7 @@ export function toWebAuthnRegisterOptions(
       name: options.rp.name,
     },
     user: {
-      id: encodeUrl(
-        ArrayBuffer.isView(options.user.id)
-          ? options.user.id.buffer
-          : options.user.id
-      ),
+      id: encodeUrl(ArrayBuffer.isView(options.user.id) ? options.user.id.buffer : options.user.id),
       displayName: options.user.displayName,
       name: options.user.name,
     },
@@ -185,9 +173,7 @@ export function toWebAuthnRegisterOptions(
     }));
   }
   if ("extensions" in options) {
-    obj.extensions = Object.fromEntries(
-      Object.entries(options.extensions ?? {})
-    );
+    obj.extensions = Object.fromEntries(Object.entries(options.extensions ?? {}));
   }
   if ("timeout" in options) {
     obj.timeout = options.timeout;

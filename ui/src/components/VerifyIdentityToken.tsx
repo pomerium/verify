@@ -23,9 +23,7 @@ const VerifyIdentityToken: FC<Props> = ({ info }) => {
         <div className="box-inner">
           <div className="category-header clearfix">
             <span className="category-title">Signed Identity Token</span>
-            {!info?.error &&
-            info?.identity?.raw_jwt &&
-            info?.identity?.public_key ? (
+            {!info?.error && info?.identity?.raw_jwt && info?.identity?.public_key ? (
               <>
                 <a
                   href={`https://jwt.io/#debugger-io?token=${info?.identity?.raw_jwt}&publicKey=${info?.identity?.public_key}`}
@@ -100,8 +98,7 @@ const VerifyIdentityToken: FC<Props> = ({ info }) => {
         </div>
         <div className="category-link">
           Pomerium adds a signed JWT token to the incoming request headers (
-          <code>X-Pomerium-Jwt-Assertion</code>) which can then be used to
-          assert a{" "}
+          <code>X-Pomerium-Jwt-Assertion</code>) which can then be used to assert a{" "}
           <a href="https://www.pomerium.com/docs/topics/getting-users-identity.html#verification">
             user's identity details
           </a>

@@ -47,12 +47,9 @@ const VerifyHeaders: FC<Props> = ({ info }) => {
         </div>
         <div className="category-link">
           Pomerium allows{" "}
-          <a href="https://www.pomerium.com/docs/reference/jwt-claim-headers">
-            passing identity{" "}
-          </a>{" "}
+          <a href="https://www.pomerium.com/docs/reference/jwt-claim-headers">passing identity </a>{" "}
           to upstream applications as HTTP request headers. Note, unlike{" "}
-          <code>X-Pomerium-Jwt-Assertion</code> these headers are{" "}
-          <strong>not signed</strong>.
+          <code>X-Pomerium-Jwt-Assertion</code> these headers are <strong>not signed</strong>.
         </div>
       </div>
     </div>

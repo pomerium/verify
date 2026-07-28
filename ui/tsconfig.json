@@ -11,5 +11,5 @@
     "target": "esnext",
     "verbatimModuleSyntax": true
   },
-  "include": ["src"]
+  "include": ["src", "vite.config.ts"]
 }
