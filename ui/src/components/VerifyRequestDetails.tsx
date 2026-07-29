@@ -31,8 +31,8 @@ const VerifyRequestDetails: FC<Props> = ({ info }) => {
           </table>
         </div>
         <div className="category-link">
-          A complete dump of the values on this page can be found at the{" "}
-          <a href="/json">/json</a> endpoint.
+          A complete dump of the values on this page can be found at the <a href="/json">/json</a>{" "}
+          endpoint.
         </div>
       </div>
     </div>
