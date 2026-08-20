@@ -35,7 +35,6 @@ func (v *tlsVerifier) DialTLSContext(ctx context.Context, network, addr string) 
 	dialer := &net.Dialer{
 		Timeout:   maxRemoteWait,
 		KeepAlive: maxRemoteWait,
-		DualStack: true,
 	}
 	log.Info().Str("addr", addr).Msg("dialing")
 	conn, err := tls.DialWithDialer(dialer, network, addr, &tls.Config{
