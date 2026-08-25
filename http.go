@@ -168,7 +168,7 @@ func (srv *Server) serveTemplate(w http.ResponseWriter, r *http.Request, name, e
 }
 
 func (srv *Server) serveAPIVerifyInfo(w http.ResponseWriter, r *http.Request) {
-	type M = map[string]interface{}
+	type M = map[string]any
 
 	res := M{
 		"headers": getPomeriumHeaders(r),

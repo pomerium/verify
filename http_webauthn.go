@@ -87,7 +87,7 @@ func (srv *Server) serveAPIWebAuthnRegister(w http.ResponseWriter, r *http.Reque
 	}
 }
 
-func decodeJSONBody(r *http.Request, dsts ...interface{}) error {
+func decodeJSONBody(r *http.Request, dsts ...any) error {
 	defer func() { _ = r.Body.Close() }()
 
 	bs, err := io.ReadAll(io.LimitReader(r.Body, maxBodySize))

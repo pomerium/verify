@@ -57,7 +57,7 @@ func (backend *FirestoreBackend) SetRegisterRequest(ctx context.Context, req *We
 	return backend.set(ctx, collectionNameWebAuthnRegisterRequests, req.GetID(), req)
 }
 
-func (backend *FirestoreBackend) get(ctx context.Context, collectionName, objectID string, dst interface{}) error {
+func (backend *FirestoreBackend) get(ctx context.Context, collectionName, objectID string, dst any) error {
 	collection := backend.client.Collection(collectionName)
 	doc := collection.Doc(objectID)
 
@@ -73,7 +73,7 @@ func (backend *FirestoreBackend) get(ctx context.Context, collectionName, object
 	return snapshot.DataTo(dst)
 }
 
-func (backend *FirestoreBackend) set(ctx context.Context, collectionName, objectID string, obj interface{}) error {
+func (backend *FirestoreBackend) set(ctx context.Context, collectionName, objectID string, obj any) error {
 	collection := backend.client.Collection(collectionName)
 	doc := collection.Doc(objectID)
 	_, err := doc.Set(ctx, obj)
