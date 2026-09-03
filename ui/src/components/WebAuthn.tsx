@@ -206,7 +206,7 @@ const WebAuthn: FC = () => {
             <form>
               <Container>
                 <Grid container spacing={3}>
-                  <Grid item xs={12}>
+                  <Grid size={12}>
                     <TextField
                       fullWidth
                       label="Username"
@@ -215,7 +215,7 @@ const WebAuthn: FC = () => {
                       variant="outlined"
                     />
                   </Grid>
-                  <Grid item xs={12}>
+                  <Grid size={12}>
                     <FormControl fullWidth>
                       <InputLabel>Attestation Type</InputLabel>
                       <Select
@@ -229,7 +229,7 @@ const WebAuthn: FC = () => {
                       </Select>
                     </FormControl>
                   </Grid>
-                  <Grid item xs={12}>
+                  <Grid size={12}>
                     <FormControl fullWidth>
                       <InputLabel>Authenticator Type</InputLabel>
                       <Select
@@ -243,7 +243,7 @@ const WebAuthn: FC = () => {
                       </Select>
                     </FormControl>
                   </Grid>
-                  <Grid item xs={6}>
+                  <Grid size={6}>
                     <Button
                       disabled={!username}
                       onClick={onClickRegister}
@@ -253,7 +253,7 @@ const WebAuthn: FC = () => {
                       Register
                     </Button>
                   </Grid>
-                  <Grid item xs={6}>
+                  <Grid size={6}>
                     <Button
                       disabled={!username || !knownCredentials?.length}
                       onClick={onClickLogin}
@@ -264,7 +264,7 @@ const WebAuthn: FC = () => {
                     </Button>
                   </Grid>
                   {result ? (
-                    <Grid item xs={12}>
+                    <Grid size={12}>
                       <Alert severity={result.severity}>{result.message}</Alert>
                     </Grid>
                   ) : (
