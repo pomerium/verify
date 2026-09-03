@@ -1,5 +1,4 @@
-import createTheme from "@mui/material/styles/createTheme";
-import ThemeProvider from "@mui/material/styles/ThemeProvider";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { type FC } from "react";
 
 import Verify from "./Verify";
