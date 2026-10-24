@@ -122,8 +122,8 @@ github.com/planetscale/vtprotobuf v0.6.1-0.20240319094008-0393e58bdf10/go.mod h1
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/pomerium/sdk-go v0.0.9 h1:ISgxxUKgH49wtnSSpvDeDwLPUQ/0rQhT3lwT35RYet4=
 github.com/pomerium/sdk-go v0.0.9/go.mod h1:+Qm7Y6EWQHADeUV0RkPlV5OSqImaatqX8Kq5zutNpkA=
-github.com/pomerium/webauthn v0.0.0-20261022133058-b08b3d0192c0 h1:PGyo+upHV2kxInPxkJUfhbeoHI1yiAUgc5QzN7fFJho=
-github.com/pomerium/webauthn v0.0.0-20261022133058-b08b3d0192c0/go.mod h1:E/0K3v+fruyWacb6B4kqokOAw3VenHdoj8TM2ZFRWWI=
+github.com/pomerium/webauthn v0.0.0-20261023135431-6b0074914851 h1:qTxuQGy1R1ejvfGZ8NL5bwcxmuRz6R7tgGWHudg3CWM=
+github.com/pomerium/webauthn v0.0.0-20261023135431-6b0074914851/go.mod h1:E/0K3v+fruyWacb6B4kqokOAw3VenHdoj8TM2ZFRWWI=
 github.com/power-devops/perfstat v0.0.0-20240221224432-82ca36839d55 h1:o4JXh1EVt9k/+g42oCprj/FisM4qX9L3sZB3upGN2ZU=
 github.com/power-devops/perfstat v0.0.0-20240221224432-82ca36839d55/go.mod h1:OmDBASR4679mdNQnz2pUhc2G8CO2JrUAVFDRBDP/hJE=
 github.com/rs/zerolog v1.35.1 h1:m7xQeoiLIiV0BCEY4Hs+j2NG4Gp2o2KPKmhnnLiazKI=
