@@ -9,7 +9,7 @@ import (
 	"html/template"
 	"io"
 	"io/fs"
-	stdlog "log"
+	"log/slog"
 	"net/http"
 	"net/url"
 	"os"
@@ -19,12 +19,22 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
-	"github.com/go-jose/go-jose/v3"
-	"github.com/go-jose/go-jose/v3/jwt"
+	"github.com/go-jose/go-jose/v4"
+	"github.com/go-jose/go-jose/v4/jwt"
 	"github.com/rs/zerolog/log"
 
 	sdk "github.com/pomerium/sdk-go"
 )
+
+// signatureAlgorithms are the JWS algorithms accepted when reading claims from
+// the Pomerium JWT assertion header without verifying it.
+var signatureAlgorithms = []jose.SignatureAlgorithm{
+	jose.EdDSA,
+	jose.HS256, jose.HS384, jose.HS512,
+	jose.RS256, jose.RS384, jose.RS512,
+	jose.ES256, jose.ES384, jose.ES512,
+	jose.PS256, jose.PS384, jose.PS512,
+}
 
 //go:embed ui/dist
 var uiFS embed.FS
@@ -41,7 +51,7 @@ func (srv *Server) initRouter() {
 		Issuer: srv.cfg.expectedJWTIssuer,
 	}
 	if aud := srv.cfg.expectedJWTAudience; aud != "" {
-		expected.Audience = jwt.Audience([]string{aud})
+		expected.AnyAudience = jwt.Audience([]string{aud})
 	}
 
 	datastore, err := sdk.NewLRUKeyStore(1024)
@@ -52,7 +62,7 @@ func (srv *Server) initRouter() {
 	verifier, err := sdk.New(&sdk.Options{
 		Datastore:    datastore,
 		HTTPClient:   client,
-		Logger:       stdlog.New(log.With().Logger(), "", 0),
+		Logger:       slog.New(slog.NewTextHandler(log.With().Logger(), nil)),
 		JWKSEndpoint: srv.cfg.jwksEndpoint,
 		Expected:     expected,
 	})
@@ -204,7 +214,7 @@ func (srv *Server) serveAPIVerifyInfo(w http.ResponseWriter, r *http.Request) {
 
 func getUnverifiedIdentity(r *http.Request) *sdk.Identity {
 	identity := new(sdk.Identity)
-	jwt, err := jose.ParseSigned(sdk.TokenFromHeader(r))
+	jwt, err := jose.ParseSigned(sdk.TokenFromHeader(r), signatureAlgorithms)
 	if err != nil {
 		log.Err(err).Msg("error parsing JWT assertion header")
 		return identity
