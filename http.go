@@ -9,7 +9,7 @@ import (
 	"html/template"
 	"io"
 	"io/fs"
-	stdlog "log"
+	"log/slog"
 	"net/http"
 	"net/url"
 	"os"
@@ -22,6 +22,7 @@ import (
 	"github.com/go-jose/go-jose/v3"
 	"github.com/go-jose/go-jose/v3/jwt"
 	"github.com/rs/zerolog/log"
+	slogzerolog "github.com/samber/slog-zerolog"
 
 	sdk "github.com/pomerium/sdk-go"
 )
@@ -50,9 +51,11 @@ func (srv *Server) initRouter() {
 	}
 
 	verifier, err := sdk.New(&sdk.Options{
-		Datastore:    datastore,
-		HTTPClient:   client,
-		Logger:       stdlog.New(log.With().Logger(), "", 0),
+		Datastore:  datastore,
+		HTTPClient: client,
+		Logger: slog.New(slogzerolog.Option{
+			Level: slog.LevelDebug,
+		}.NewZerologHandler()),
 		JWKSEndpoint: srv.cfg.jwksEndpoint,
 		Expected:     expected,
 	})
