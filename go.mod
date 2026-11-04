@@ -7,7 +7,7 @@ require (
 	github.com/go-chi/chi v4.1.2+incompatible
 	github.com/go-jose/go-jose/v3 v3.0.5
 	github.com/pomerium/sdk-go v0.0.9
-	github.com/pomerium/webauthn v0.0.0-20261023135431-6b0074914851
+	github.com/pomerium/webauthn v0.0.0-20261102213307-a62a88383d37
 	github.com/rs/zerolog v1.35.1
 	github.com/stretchr/testify v1.12.1
 	github.com/testcontainers/testcontainers-go v0.44.0
@@ -37,7 +37,7 @@ require (
 	github.com/docker/go-units v0.5.0 // indirect
 	github.com/ebitengine/purego v0.10.1 // indirect
 	github.com/felixge/httpsnoop v1.1.0 // indirect
-	github.com/fxamacker/cbor/v2 v2.9.6 // indirect
+	github.com/fxamacker/cbor/v2 v2.10.0 // indirect
 	github.com/go-logr/logr v1.4.4 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-ole/go-ole v1.3.0 // indirect
