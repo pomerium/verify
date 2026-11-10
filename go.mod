@@ -6,7 +6,7 @@ require (
 	cloud.google.com/go/firestore v1.29.1
 	github.com/go-chi/chi v4.1.2+incompatible
 	github.com/go-jose/go-jose/v3 v3.0.5
-	github.com/pomerium/sdk-go v0.0.10-0.20261105020843-9c925563bfa0
+	github.com/pomerium/sdk-go v0.0.10-0.20261110022632-86aa3a97e480
 	github.com/pomerium/webauthn v0.0.0-20261102213307-a62a88383d37
 	github.com/rs/zerolog v1.35.1
 	github.com/samber/slog-zerolog v1.0.0
@@ -75,8 +75,8 @@ require (
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/opencontainers/image-spec v1.1.1 // indirect
 	github.com/planetscale/vtprotobuf v0.6.1-0.20240319094008-0393e58bdf10 // indirect
-	github.com/pomerium/pomerium/pkg/grpc/config v0.34.0 // indirect
-	github.com/pomerium/pomerium/pkg/grpc/databroker v0.34.0 // indirect
+	github.com/pomerium/pomerium/pkg/grpc/config v0.34.1-0.20261110012034-bfab9866f123 // indirect
+	github.com/pomerium/pomerium/pkg/grpc/databroker v0.34.1-0.20261110012034-bfab9866f123 // indirect
 	github.com/power-devops/perfstat v0.0.0-20240221224432-82ca36839d55 // indirect
 	github.com/samber/lo v1.38.1 // indirect
 	github.com/shirou/gopsutil/v4 v4.26.6 // indirect
