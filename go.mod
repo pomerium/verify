@@ -7,7 +7,7 @@ require (
 	github.com/go-chi/chi v4.1.2+incompatible
 	github.com/go-jose/go-jose/v3 v3.0.5
 	github.com/pomerium/sdk-go v0.0.10-0.20261120034116-ca676ca2efb7
-	github.com/pomerium/webauthn v0.0.0-20261102213307-a62a88383d37
+	github.com/pomerium/webauthn v0.0.0-20261120034504-5ea9871125dd
 	github.com/rs/zerolog v1.35.1
 	github.com/samber/slog-zerolog v1.0.0
 	github.com/stretchr/testify v1.12.1
