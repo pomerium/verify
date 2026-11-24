@@ -22,6 +22,7 @@ import (
 	"github.com/go-jose/go-jose/v4"
 	"github.com/go-jose/go-jose/v4/jwt"
 	"github.com/rs/zerolog/log"
+	slogzerolog "github.com/samber/slog-zerolog"
 
 	sdk "github.com/pomerium/sdk-go"
 )
@@ -60,9 +61,11 @@ func (srv *Server) initRouter() {
 	}
 
 	verifier, err := sdk.New(&sdk.Options{
-		Datastore:    datastore,
-		HTTPClient:   client,
-		Logger:       slog.New(slog.NewTextHandler(log.With().Logger(), nil)),
+		Datastore:  datastore,
+		HTTPClient: client,
+		Logger: slog.New(slogzerolog.Option{
+			Level: slog.LevelDebug,
+		}.NewZerologHandler()),
 		JWKSEndpoint: srv.cfg.jwksEndpoint,
 		Expected:     expected,
 	})
