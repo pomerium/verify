@@ -27,15 +27,9 @@ import (
 	sdk "github.com/pomerium/sdk-go"
 )
 
-// signatureAlgorithms are the JWS algorithms accepted when reading claims from
-// the Pomerium JWT assertion header without verifying it.
-var signatureAlgorithms = []jose.SignatureAlgorithm{
-	jose.EdDSA,
-	jose.HS256, jose.HS384, jose.HS512,
-	jose.RS256, jose.RS384, jose.RS512,
-	jose.ES256, jose.ES384, jose.ES512,
-	jose.PS256, jose.PS384, jose.PS512,
-}
+// signatureAlgorithms are the algorithms Pomerium signs JWT assertions with:
+// ES256 for an EC P-256 signing key, RS256 for an RSA one.
+var signatureAlgorithms = []jose.SignatureAlgorithm{jose.ES256, jose.RS256}
 
 //go:embed ui/dist
 var uiFS embed.FS
