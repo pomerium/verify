@@ -19,13 +19,17 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
-	"github.com/go-jose/go-jose/v3"
-	"github.com/go-jose/go-jose/v3/jwt"
+	"github.com/go-jose/go-jose/v4"
+	"github.com/go-jose/go-jose/v4/jwt"
 	"github.com/rs/zerolog/log"
 	slogzerolog "github.com/samber/slog-zerolog"
 
 	sdk "github.com/pomerium/sdk-go"
 )
+
+// signatureAlgorithms are the algorithms Pomerium signs JWT assertions with:
+// ES256 for an EC P-256 signing key, RS256 for an RSA one.
+var signatureAlgorithms = []jose.SignatureAlgorithm{jose.ES256, jose.RS256}
 
 //go:embed ui/dist
 var uiFS embed.FS
@@ -42,7 +46,7 @@ func (srv *Server) initRouter() {
 		Issuer: srv.cfg.expectedJWTIssuer,
 	}
 	if aud := srv.cfg.expectedJWTAudience; aud != "" {
-		expected.Audience = jwt.Audience([]string{aud})
+		expected.AnyAudience = jwt.Audience([]string{aud})
 	}
 
 	datastore, err := sdk.NewLRUKeyStore(1024)
@@ -207,7 +211,7 @@ func (srv *Server) serveAPIVerifyInfo(w http.ResponseWriter, r *http.Request) {
 
 func getUnverifiedIdentity(r *http.Request) *sdk.Identity {
 	identity := new(sdk.Identity)
-	jwt, err := jose.ParseSigned(sdk.TokenFromHeader(r))
+	jwt, err := jose.ParseSigned(sdk.TokenFromHeader(r), signatureAlgorithms)
 	if err != nil {
 		log.Err(err).Msg("error parsing JWT assertion header")
 		return identity

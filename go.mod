@@ -5,8 +5,8 @@ go 1.26.9
 require (
 	cloud.google.com/go/firestore v1.29.1
 	github.com/go-chi/chi v4.1.2+incompatible
-	github.com/go-jose/go-jose/v3 v3.0.5
-	github.com/pomerium/sdk-go v0.0.10-0.20261120034116-ca676ca2efb7
+	github.com/go-jose/go-jose/v4 v4.1.6
+	github.com/pomerium/sdk-go v0.0.10-0.20261124020402-0b8daee4a71d
 	github.com/pomerium/webauthn v0.0.0-20261102213307-a62a88383d37
 	github.com/rs/zerolog v1.35.1
 	github.com/samber/slog-zerolog v1.0.0
@@ -46,6 +46,7 @@ require (
 	github.com/envoyproxy/protoc-gen-validate v1.3.3 // indirect
 	github.com/felixge/httpsnoop v1.1.0 // indirect
 	github.com/fxamacker/cbor/v2 v2.10.0 // indirect
+	github.com/go-jose/go-jose/v3 v3.0.5 // indirect
 	github.com/go-logr/logr v1.4.4 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-ole/go-ole v1.3.0 // indirect

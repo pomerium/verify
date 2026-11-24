@@ -69,6 +69,8 @@ github.com/go-chi/chi v4.1.2+incompatible h1:fGFk2Gmi/YKXk0OmGfBh0WgmN3XB8lVnEyN
 github.com/go-chi/chi v4.1.2+incompatible/go.mod h1:eB3wogJHnLi3x/kFX2A+IbTBlXxmMeXJVKy9tTv1XzQ=
 github.com/go-jose/go-jose/v3 v3.0.5 h1:BLLJWbC4nMZOfuPVxoZIxeYsn6Nl2r1fITaJ78UQlVQ=
 github.com/go-jose/go-jose/v3 v3.0.5/go.mod h1:5b+7YgP7ZICgJDBdfjZaIt+H/9L9T/YQrVfLAMboGkQ=
+github.com/go-jose/go-jose/v4 v4.1.6 h1:sNRkftxFJxwsILiQukqp5z83QBSmntVwmgRY7AqBDO4=
+github.com/go-jose/go-jose/v4 v4.1.6/go.mod h1:x4oUasVrzR7071A4TnHLGSPpNOm2a21K9Kf04k1rs08=
 github.com/go-logr/logr v1.2.2/go.mod h1:jdQByPbusPIv2/zmleS9BjJVeZ6kBagPoEUsqbVz/1A=
 github.com/go-logr/logr v1.4.4 h1:tG4xh9yMsRCAiodLVTxyrkzSZ9+o0L1Kg/+cPVcbP/8=
 github.com/go-logr/logr v1.4.4/go.mod h1:9T104GzyrTigFIr8wt5mBrctHMim0Nb2HLGrmQ40KvY=
@@ -142,8 +144,8 @@ github.com/pomerium/pomerium/pkg/grpc/config v0.34.1-0.20261119225326-3d7b523df7
 github.com/pomerium/pomerium/pkg/grpc/config v0.34.1-0.20261119225326-3d7b523df7da/go.mod h1:BF3tN530yhDn2FDbIYki40Eews4omad7+UxkxzuZZWY=
 github.com/pomerium/pomerium/pkg/grpc/databroker v0.34.1-0.20261119225326-3d7b523df7da h1:ic5Ot5V3UHhBBF9CascG8aEUyTgFlTWKnnP7gvQWD38=
 github.com/pomerium/pomerium/pkg/grpc/databroker v0.34.1-0.20261119225326-3d7b523df7da/go.mod h1:BMEhYT/fXDX/PKF3ExPneFXrGUM0M0E8RxShajDBJuA=
-github.com/pomerium/sdk-go v0.0.10-0.20261120034116-ca676ca2efb7 h1:dnpdlJg9jCiq0iaJt7sKFvwJg8RtJnByXrcT/jsJvds=
-github.com/pomerium/sdk-go v0.0.10-0.20261120034116-ca676ca2efb7/go.mod h1:/6G6iQipLQa6lhD1H5N0u9K8G7PvgbGH8MKFScIFj/Y=
+github.com/pomerium/sdk-go v0.0.10-0.20261124020402-0b8daee4a71d h1:hejgHlk15J50m5tqD/h9mPI2zWW+Ra4mTxSctELZQis=
+github.com/pomerium/sdk-go v0.0.10-0.20261124020402-0b8daee4a71d/go.mod h1:fdEtldzNgFs/iWU7xQvFaDZOlNYrAgET3lt8x797rWU=
 github.com/pomerium/webauthn v0.0.0-20261102213307-a62a88383d37 h1:x2/q5FgYbIALN8/Uz91/BQ54No/uu47u5Sb92YTqObs=
 github.com/pomerium/webauthn v0.0.0-20261102213307-a62a88383d37/go.mod h1:FxH3CxMACeT09l6w9R0Vv1Dlmyf3asRe2uDKmxslgN4=
 github.com/power-devops/perfstat v0.0.0-20240221224432-82ca36839d55 h1:o4JXh1EVt9k/+g42oCprj/FisM4qX9L3sZB3upGN2ZU=
