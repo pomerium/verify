@@ -1,4 +1,4 @@
-FROM node:26.13.1-bookworm@sha256:b7087bc4d973034b30854b378ba107f9fab622b47514cb7e2592e41b8bab8d49 AS ui
+FROM node:26.13.1-bookworm@sha256:893ea48106e988a5f91e69629d6472600daa9d0494adf7db87eb0b886ce82255 AS ui
 WORKDIR /build
 
 COPY Makefile ./Makefile
@@ -8,7 +8,7 @@ COPY ./ui/ ./ui/
 RUN make npm-install
 RUN make build-ui
 
-FROM golang:1.27.4-bookworm@sha256:4fa7c968ba93f1635670522dbb01a2c78150443e1385746924566079f36570ea AS build
+FROM golang:1.27.4-bookworm@sha256:ce59b41415e2524ae99926fe1f37ce48ba8c194dcbd2a56a65436cdcefa2bd34 AS build
 WORKDIR /build
 
 COPY Makefile ./Makefile
